@@ -6,116 +6,85 @@
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
-<title>Super Bonsai — Web Revenue per Session, June 7 onward</title>
+<title>Super Bonsai — Web Revenue per Session</title>
 <style>
   .viz-root {
     color-scheme: light;
-    --surface-1: #fcfcfb;
-    --plane: #f9f9f7;
-    --text-primary: #0b0b0b;
-    --text-secondary: #52514e;
-    --muted: #898781;
-    --grid: #e1e0d9;
-    --axis: #c3c2b7;
-    --border: rgba(11,11,11,0.10);
-    --series-1: #2a78d6;
-    --series-2: #eb6834;
-    --series-3: #1baf7a;
-    --critical: #d03b3b;
-    --good-text: #006300;
+    --surface-1: #fcfcfb; --plane: #f9f9f7;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100;
+    --critical: #d03b3b; --good-text: #006300; --warning: #fab219;
   }
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) .viz-root {
       color-scheme: dark;
-      --surface-1: #1a1a19;
-      --plane: #0d0d0d;
-      --text-primary: #ffffff;
-      --text-secondary: #c3c2b7;
-      --muted: #898781;
-      --grid: #2c2c2a;
-      --axis: #383835;
-      --border: rgba(255,255,255,0.10);
-      --series-1: #3987e5;
-      --series-2: #d95926;
-      --series-3: #199e70;
-      --critical: #d03b3b;
-      --good-text: #0ca30c;
+      --surface-1: #1a1a19; --plane: #0d0d0d;
+      --text-primary: #ffffff; --text-secondary: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
+      --critical: #d03b3b; --good-text: #0ca30c; --warning: #fab219;
     }
   }
   :root[data-theme="dark"] .viz-root {
     color-scheme: dark;
-    --surface-1: #1a1a19;
-    --plane: #0d0d0d;
-    --text-primary: #ffffff;
-    --text-secondary: #c3c2b7;
-    --muted: #898781;
-    --grid: #2c2c2a;
-    --axis: #383835;
-    --border: rgba(255,255,255,0.10);
-    --series-1: #3987e5;
-    --series-2: #d95926;
-    --series-3: #199e70;
-    --critical: #d03b3b;
-    --good-text: #0ca30c;
+    --surface-1: #1a1a19; --plane: #0d0d0d;
+    --text-primary: #ffffff; --text-secondary: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
+    --critical: #d03b3b; --good-text: #0ca30c; --warning: #fab219;
   }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  body {
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: var(--plane, #f9f9f7);
-  }
-  .viz-root {
-    background: var(--plane);
-    color: var(--text-primary);
-    min-height: 100vh;
-    padding: 32px 24px 64px;
-  }
-  .wrap { max-width: 1080px; margin: 0 auto; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--plane, #f9f9f7); }
+  .viz-root { background: var(--plane); color: var(--text-primary); min-height: 100vh; padding: 30px 22px 64px; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
 
-  header.page { margin-bottom: 8px; }
   h1 { font-size: 24px; line-height: 1.25; margin: 0 0 6px; font-weight: 650; letter-spacing: -0.01em; }
   .sub { font-size: 13px; color: var(--text-secondary); margin: 0; }
   .sub code { font-size: 12px; color: var(--muted); }
 
-  .controls {
-    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
-    margin: 20px 0 24px; padding: 10px 12px;
-    background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px;
+  .filters {
+    position: sticky; top: 0; z-index: 20;
+    margin: 18px 0 20px; padding: 12px 14px;
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 11px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
   }
-  .controls .label { font-size: 12px; color: var(--muted); margin-right: 2px; }
-  button.ctl {
-    font: inherit; font-size: 13px; color: var(--text-primary);
+  .frow { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+  .frow + .frow { margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--grid); }
+  .flabel { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-right: 4px; min-width: 74px; }
+  button.ctl, input.dt {
+    font: inherit; font-size: 12.5px; color: var(--text-primary);
     background: transparent; border: 1px solid var(--border);
-    border-radius: 7px; padding: 5px 11px; cursor: pointer;
+    border-radius: 7px; padding: 5px 10px; cursor: pointer;
   }
+  input.dt { cursor: text; font-variant-numeric: tabular-nums; }
   button.ctl:hover { background: var(--plane); }
-  button.ctl[aria-pressed="true"] { background: var(--plane); border-color: var(--axis); font-weight: 600; }
+  button.ctl[aria-pressed="true"] { background: var(--plane); border-color: var(--axis); font-weight: 620; }
+  .rangeout { font-size: 12.5px; color: var(--text-secondary); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .rangeout b { color: var(--text-primary); font-weight: 640; }
 
-  .card {
-    background: var(--surface-1); border: 1px solid var(--border);
-    border-radius: 12px; padding: 20px 22px; margin-bottom: 20px;
-  }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-bottom: 18px; }
   .card h2 { font-size: 15px; font-weight: 620; margin: 0 0 2px; letter-spacing: -0.005em; }
-  .card .note { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 16px; line-height: 1.5; }
+  .card .note { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 15px; line-height: 1.5; }
+  .card .rangetag { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
-  /* hero */
-  .hero { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-end; }
-  .hero .fig { font-size: 60px; line-height: 1; font-weight: 640; letter-spacing: -0.03em; }
+  .hero { display: flex; flex-wrap: wrap; gap: 30px; align-items: flex-end; }
+  .hero .fig { font-size: 58px; line-height: 1; font-weight: 640; letter-spacing: -0.03em; }
   .hero .figlab { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
-  .hero .delta { font-size: 17px; font-weight: 600; color: var(--critical); }
+  .hero .delta { font-size: 17px; font-weight: 600; }
   .hero .vs { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
 
-  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
-  .tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
-  .tile .k { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.045em; }
-  .tile .v { font-size: 30px; font-weight: 620; letter-spacing: -0.02em; margin: 7px 0 4px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(186px, 1fr)); gap: 11px; margin-bottom: 18px; }
+  .tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 15px 17px; }
+  .tile .k { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.045em; }
+  .tile .v { font-size: 27px; font-weight: 620; letter-spacing: -0.02em; margin: 7px 0 4px; }
   .tile .d { font-size: 12.5px; font-weight: 600; }
-  .tile .d.down { color: var(--critical); }
-  .tile .d.up { color: var(--good-text); }
   .tile .b { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+  .down { color: var(--critical); } .up { color: var(--good-text); } .flat { color: var(--text-secondary); }
 
-  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin: 0 0 10px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 15px; margin: 0 0 10px; }
   .legend .item { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--text-secondary); }
   .legend .swatch { width: 11px; height: 11px; border-radius: 3px; flex: none; }
 
@@ -125,17 +94,15 @@
   .axis-line { stroke: var(--axis); stroke-width: 1; }
   .tick { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
   .dlabel { font-size: 11.5px; font-weight: 600; }
-  .anno { font-size: 11px; fill: var(--text-secondary); }
+  .anno { font-size: 10.5px; fill: var(--text-secondary); }
 
   .tip {
-    position: absolute; pointer-events: none; opacity: 0;
-    transition: opacity .09s ease; z-index: 5;
-    background: var(--surface-1); border: 1px solid var(--axis);
-    border-radius: 8px; padding: 8px 10px; min-width: 148px;
-    box-shadow: 0 4px 14px rgba(0,0,0,.13);
+    position: absolute; pointer-events: none; opacity: 0; transition: opacity .09s ease; z-index: 8;
+    background: var(--surface-1); border: 1px solid var(--axis); border-radius: 8px;
+    padding: 8px 10px; min-width: 158px; box-shadow: 0 4px 14px rgba(0,0,0,.13);
     font-size: 12px; color: var(--text-primary);
   }
-  .tip .th { font-weight: 640; margin-bottom: 5px; font-size: 12px; }
+  .tip .th { font-weight: 640; margin-bottom: 5px; }
   .tip .row { display: flex; align-items: center; gap: 7px; margin-top: 3px; }
   .tip .row .sw { width: 9px; height: 9px; border-radius: 2px; flex: none; }
   .tip .row .nm { color: var(--text-secondary); flex: 1; }
@@ -144,207 +111,156 @@
 
   table { border-collapse: collapse; width: 100%; font-size: 12.5px; font-variant-numeric: tabular-nums; }
   caption { text-align: left; font-size: 12px; color: var(--muted); padding-bottom: 8px; }
-  th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th, td { padding: 6px 9px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
   th:first-child, td:first-child { text-align: left; font-variant-numeric: normal; }
   thead th { color: var(--text-secondary); font-weight: 600; border-bottom: 1px solid var(--axis); }
-  .tblwrap { margin-top: 18px; overflow-x: auto; }
+  .tblwrap { margin-top: 16px; overflow-x: auto; max-height: 420px; overflow-y: auto; }
   .tblwrap[hidden] { display: none; }
 
-  .findings { display: grid; gap: 12px; }
+  .findings { display: grid; gap: 13px; }
   .finding { border-left: 3px solid var(--axis); padding: 2px 0 2px 14px; }
   .finding.refuted { border-left-color: var(--critical); }
   .finding.confirmed { border-left-color: var(--series-3); }
-  .finding .vt { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+  .finding.revised { border-left-color: var(--warning); }
+  .finding .vt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
   .finding .cl { font-size: 13.5px; font-weight: 620; margin: 3px 0 4px; }
   .finding p { font-size: 13px; line-height: 1.55; color: var(--text-secondary); margin: 0; }
   .finding p + p { margin-top: 6px; }
 
-  footer.page { font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 8px; }
+  footer.page { font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 6px; }
+  .warnbox { border-left: 3px solid var(--warning); padding: 2px 0 2px 14px; margin: 0 0 15px; }
+  .warnbox p { font-size: 12.5px; line-height: 1.55; color: var(--text-secondary); margin: 0; }
 </style>
 </head>
 <body>
 <div class="viz-root">
 <div class="wrap">
 
-  <header class="page">
-    <h1>Web revenue per session is down 42% — and it is not a tracking artifact</h1>
-    <p class="sub">Super Bonsai · <code>superbonsai.myshopify.com</code> · Online Store channel only, June 7 – August 16, 2026 · Source: Shopify ShopifyQL (<code>sales</code>, <code>sessions</code>), pulled 2026-08-16</p>
+  <header>
+    <h1>Web revenue per session — Super Bonsai</h1>
+    <p class="sub">Online Store channel only · <code>superbonsai.myshopify.com</code> · Source: Shopify ShopifyQL (<code>sales</code>, <code>sessions</code>), pulled 2026-08-16. Data begins 2026-06-07; nothing earlier is available from this source.</p>
   </header>
 
-  <div class="controls">
-    <span class="label">View</span>
-    <button class="ctl" id="themeBtn" aria-pressed="false">Dark mode</button>
-    <button class="ctl" id="tableBtn" aria-pressed="false">Show data tables</button>
+  <div class="filters">
+    <div class="frow">
+      <span class="flabel">Range</span>
+      <button class="ctl" data-preset="all">Full range</button>
+      <button class="ctl" data-preset="base">June baseline</button>
+      <button class="ctl" data-preset="d30">Last 30 days</button>
+      <button class="ctl" data-preset="d14">Last 14 days</button>
+      <button class="ctl" data-preset="post">Since Escape Hatch removed</button>
+    </div>
+    <div class="frow">
+      <span class="flabel">Custom</span>
+      <input class="dt" type="date" id="from" min="2026-06-07" max="2026-08-16">
+      <span style="font-size:12.5px;color:var(--muted)">to</span>
+      <input class="dt" type="date" id="to" min="2026-06-07" max="2026-08-16">
+      <button class="ctl" id="applyBtn">Apply</button>
+      <span class="rangeout" id="rangeOut"></span>
+    </div>
+    <div class="frow">
+      <span class="flabel">View</span>
+      <button class="ctl" data-gran="day">Daily</button>
+      <button class="ctl" data-gran="week">Weekly</button>
+      <button class="ctl" id="themeBtn" aria-pressed="false">Dark mode</button>
+      <button class="ctl" id="tableBtn" aria-pressed="false">Show data tables</button>
+    </div>
   </div>
 
   <div class="card">
     <div class="hero">
       <div>
-        <div class="fig" id="heroFig">$1.11</div>
-        <div class="figlab">Web revenue per session — week of Aug&nbsp;3 (last complete week)</div>
+        <div class="fig" id="heroFig">—</div>
+        <div class="figlab" id="heroLab">Web revenue per session — selected range</div>
       </div>
       <div>
-        <div class="delta">−41.6%</div>
-        <div class="vs">vs. $1.90 June baseline (Jun&nbsp;8 – Jul&nbsp;5)</div>
+        <div class="delta" id="heroDelta">—</div>
+        <div class="vs">vs. $1.90 June baseline (Jun 8 – Jul 5, fixed reference)</div>
       </div>
     </div>
   </div>
 
-  <div class="tiles">
-    <div class="tile">
-      <div class="k">Web revenue / week</div>
-      <div class="v">$63,955</div>
-      <div class="d down">−46.3%</div>
-      <div class="b">June baseline $119,009/wk</div>
-    </div>
-    <div class="tile">
-      <div class="k">Web conversion rate</div>
-      <div class="v">1.76%</div>
-      <div class="d down">−45.1%</div>
-      <div class="b">June baseline 3.22%</div>
-    </div>
-    <div class="tile">
-      <div class="k">Web AOV</div>
-      <div class="v">$63.07</div>
-      <div class="d up">+6.5%</div>
-      <div class="b">June baseline $59.20</div>
-    </div>
-    <div class="tile">
-      <div class="k">Web sessions / week</div>
-      <div class="v">57,487</div>
-      <div class="d down">−8.1%</div>
-      <div class="b">June baseline 62,519/wk</div>
-    </div>
-  </div>
+  <div class="tiles" id="tiles"></div>
 
   <div class="card">
-    <h2>Web revenue per session, by week</h2>
-    <p class="note">The lead metric. Revenue ÷ sessions collapses conversion and order value into one number, and it is the figure the traffic-quality debate is actually about. Weeks are Monday-start, matching Shopify's buckets.</p>
+    <h2>Revenue per session over time</h2>
+    <p class="note">The lead metric — web revenue ÷ sessions. Markers show the Jun 7 site change and the Aug 13 Escape Hatch removal. <span class="rangetag" id="rt1"></span></p>
     <div class="chartbox"><div id="c1"></div><div class="tip" id="t1"></div></div>
     <div class="tblwrap" hidden id="tb1"></div>
   </div>
 
   <div class="card">
-    <h2>What moved: conversion collapsed, order value did not compensate</h2>
-    <p class="note">All three series indexed to the June baseline = 100, on a single axis. RPS index = CVR index × AOV index ÷ 100 exactly, so this chart is the full decomposition — there is no residual.</p>
+    <h2>Decomposition — conversion vs. order value</h2>
+    <p class="note">Indexed to the June baseline = 100, single axis. RPS index = CVR index × AOV index ÷ 100 exactly, so this is the complete decomposition with no residual. <span class="rangetag" id="rt2"></span></p>
     <div class="legend" id="l2"></div>
     <div class="chartbox"><div id="c2"></div><div class="tip" id="t2"></div></div>
     <div class="tblwrap" hidden id="tb2"></div>
   </div>
 
   <div class="card">
-    <h2>Web revenue per week (Online Store channel)</h2>
-    <p class="note">Absolute dollars — immune to any session-counting question, since the numerator does not depend on traffic measurement. Subscriptions (Skio) and Ownbase are excluded; they are declining far more slowly.</p>
+    <h2>Why RPS did not recover after the Escape Hatch came off</h2>
+    <div class="warnbox">
+      <p><strong>This is the answer to "the bots were cleared, so why is RPS still at a low?"</strong> Removing sessions should mechanically <em>raise</em> revenue per session, because the denominator shrinks and the numerator shouldn't care. That is not what happened. Day-of-week-matched, Thu–Sat before (Aug 6–8) against Thu–Sat after (Aug 13–15): sessions fell 18.5%, but web revenue fell 32.4%. Revenue fell roughly twice as fast as traffic, so RPS went <em>down</em> 17%, not up. Sessions that convert at all are not phantom sessions.</p>
+    </div>
+    <div class="legend" id="l3"></div>
     <div class="chartbox"><div id="c3"></div><div class="tip" id="t3"></div></div>
     <div class="tblwrap" hidden id="tb3"></div>
   </div>
 
   <div class="card">
-    <h2>Where the August 13 session drop came from</h2>
-    <p class="note">Daily sessions by referrer. When the Escape Hatch was removed on Aug&nbsp;13, the drop landed almost entirely in the direct / unattributed bucket — not in Instagram, which barely moved.</p>
-    <div class="legend" id="l4"></div>
+    <h2>Daily RPS around the two events — the weekly view was hiding this</h2>
+    <p class="note">The all-time-low weekly bar for the week of Aug 10 is an aggregation artifact: it blends the contaminated Aug 9–12 stretch with the clean Aug 13–15 days. At daily grain the actual low is Aug 9 ($0.46, the Google bot spike), and the post-removal days have recovered to roughly $1.13 — still well below the $1.30 that Aug 1–8 was running.</p>
     <div class="chartbox"><div id="c4"></div><div class="tip" id="t4"></div></div>
     <div class="tblwrap" hidden id="tb4"></div>
   </div>
 
   <div class="card">
-    <h2>Verdicts on the three open questions</h2>
-    <div class="findings">
-      <div class="finding refuted">
-        <div class="vt">Refuted</div>
-        <div class="cl">The pre-July baseline was 3.2%, not the 2.5–3% the owner remembers.</div>
-        <p>Measured sitewide conversion for Jun&nbsp;8 – Jul&nbsp;5 is <strong>3.16%</strong>; the two spot weeks check out at <strong>3.18%</strong> (Jun&nbsp;22) and <strong>3.44%</strong> (Jun&nbsp;29). No day in the whole June baseline fell below 2.65%. The measured numbers are right and the remembered range is low — which means the decline is <em>larger</em> than the owner currently believes, not smaller.</p>
-      </div>
-      <div class="finding refuted">
-        <div class="vt">Refuted</div>
-        <div class="cl">AOV is up ~6.5%, not the +26% implied by the −40% ÷ −52% arithmetic.</div>
-        <p>Aligning both metrics to the same window and the same channel (Online Store, week of Aug&nbsp;3 vs. the June baseline): RPS −41.6%, CVR −45.1%, AOV <strong>+6.5%</strong>. Those three reconcile exactly (0.549 × 1.065 = 0.585). The +26% came from dividing an RPS and a CVR measured over different windows.</p>
-        <p>On Shopify's own <code>average_order_value</code> metric the lift reads larger — $51.40 → $57.42, about +13.8% — because that metric excludes post-order adjustments. Either way it is well short of +26%, and it has been fading since late July.</p>
-      </div>
-      <div class="finding confirmed">
-        <div class="vt">Confirmed, with a corrected cause</div>
-        <div class="cl">Phantom sessions were ~19% of traffic — but they were direct, not Instagram.</div>
-        <p>Day-of-week-matched Thu–Sat, the last pre-removal window (Aug&nbsp;6–8) against the first clean one (Aug&nbsp;13–15): total sessions 23,460 → 19,108, <strong>−18.5%</strong>. So the ~20% estimate holds on magnitude.</p>
-        <p>The attribution does not. Of the 4,352 sessions lost, <strong>3,571 (82%) were direct / unattributed</strong>; Facebook gave up 686 and Instagram only 352 — a 4.4% dip, inside its normal week-to-week drift (Instagram ran 8,082 → 7,918 → 7,566 across the three Thu–Sat windows, a gentle slope with no step at Aug&nbsp;13). The "3,731 → 2,357" reading compares a single Instagram peak day (Aug&nbsp;11) against a trough, not a like-for-like window.</p>
-        <p>Consequence: stripping ~19% of phantom sessions raises the Aug&nbsp;6–8 conversion rate from 2.09% to 2.57% — real, but it closes only about a third of the gap to the 3.22% June baseline. Most of the conversion decline survives the correction.</p>
-      </div>
-    </div>
-  </div>
-
-  <header class="page" style="margin-top:34px">
-    <h1>Part 2 — why conversion collapsed: 94.9% of paid visitors never add to cart</h1>
-    <p class="sub">Mobile only · last 30 days to 2026-08-16 · Sources: Shopify ShopifyQL (<code>sessions</code>) for the traffic cuts; live browser measurement at 390×844 for the page cuts</p>
-  </header>
-
-  <div class="card">
-    <div class="hero">
-      <div>
-        <div class="fig">5.09%</div>
-        <div class="figlab">Add-to-cart rate — Facebook paid, mobile (154,371 sessions)</div>
-      </div>
-      <div>
-        <div class="delta">−74%</div>
-        <div class="vs">vs. 19.7% on Klaviyo email traffic</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>The same site is five different businesses, depending on who walks in</h2>
-    <p class="note">Conversion rate by traffic source, mobile only. Sitewide conversion averages these together and hides the thing that matters: the site performs for people who already know us and falls apart in front of strangers. Strangers are 69% of the traffic.</p>
+    <h2>Sessions by referrer</h2>
+    <p class="note">Referrer-level data is available from Jul 20 onward only. The Aug 13 drop lands in the direct / unattributed bucket, not Instagram. <span class="rangetag" id="rt5"></span></p>
+    <div class="legend" id="l5"></div>
     <div class="chartbox"><div id="c5"></div><div class="tip" id="t5"></div></div>
     <div class="tblwrap" hidden id="tb5"></div>
-    <p class="note" style="margin-top:10px">Caveat on the direct bucket: this window runs to Aug&nbsp;16, so roughly 27 of its 30 days still contain the phantom sessions removed with the Escape Hatch on Aug&nbsp;13. Direct is overstated here — which if anything widens the paid/owned gap rather than narrowing it.</p>
   </div>
 
   <div class="card">
-    <h2>The blockage is add-to-cart, not checkout</h2>
-    <p class="note">Add-to-cart rate by source — the leading indicator, and the thing the page changes below are meant to move. Sitewide, of the people who do add to cart, <strong>81% go on to reach checkout</strong>. The page is not failing to persuade people who engage; it is failing to get anyone to engage. Turn on the data table for the paid funnel in absolute numbers.</p>
+    <h2>Cohort LTV — did the June 7 change produce better customers?</h2>
+    <p class="note">Cumulative revenue per acquired customer, by acquisition-month cohort. April and May are fully pre-change; June is ~77% post-change (the change landed Jun 7); July is entirely post-change. Hollow markers are incomplete months — the window has not finished elapsing.</p>
+    <div class="legend" id="l6"></div>
     <div class="chartbox"><div id="c6"></div><div class="tip" id="t6"></div></div>
     <div class="tblwrap" hidden id="tb6"></div>
   </div>
 
   <div class="card">
-    <h2>How far a phone visitor has to travel to reach the buy button</h2>
-    <p class="note">Each product page was loaded at iPhone size (390×844) and photographed one screen at a time. This chart reads the screen the buy button is actually visible on — checked against the pictures, not inferred from the page code. <a href="evidence.html">Every screen is published here</a>, so the chart can be verified rather than trusted.</p>
-    <div class="chartbox"><div id="c7"></div><div class="tip" id="t7"></div></div>
-    <div class="tblwrap" hidden id="tb7"></div>
-  </div>
-
-  <div class="card">
-    <h2>What we measured on each product page</h2>
-    <div class="tblwrap" id="tb8"></div>
-  </div>
-
-  <div class="card">
-    <h2>Three findings, and what they cost</h2>
+    <h2>Verdicts</h2>
     <div class="findings">
-      <div class="finding confirmed">
-        <div class="vt">Confirmed</div>
-        <div class="cl">A full-screen pop-up covers the product page at 0.0 seconds, before anything is readable.</div>
-        <p>Measured by polling every 250ms from page load: the overlay is visible at <strong>0.0s</strong>, covers <strong>100%</strong> of the phone screen, and locks scrolling. It asks <em>“What are we helping you fix today?”</em> and offers four categories — a question a visitor arriving from a Super Liver ad answered by clicking the ad.</p>
-        <p>Grüns and Cheers run the same pop-up tool and both let the visitor see the page first (2.25s and 1.5s). More Labs shows none at all. We are the only site in the set that interrupts on arrival.</p>
-        <p><strong>On the reported A/B test:</strong> six cold sessions, six fresh browser profiles, all six got the immediate 100% overlay. That does not prove the test is not running — allocation may exclude automated traffic — but no variant was reachable from outside. Worth confirming in the Alia dashboard.</p>
+      <div class="finding revised">
+        <div class="vt">Revised — supersedes the earlier "phantom sessions confirmed" read</div>
+        <div class="cl">The Escape Hatch traffic was converting. Removing it cost real revenue.</div>
+        <p>The earlier version of this report confirmed ~19% phantom-session inflation on session counts alone and predicted that stripping them would lift conversion from 2.09% to 2.57%. With revenue joined in, that prediction fails. Thu–Sat matched: sessions −18.5%, orders −25.7%, revenue −32.4%. Conversion fell to 1.93% and AOV fell from $64.49 to $58.60.</p>
+        <p>Both halves of RPS got worse at once. If those sessions had been bots, removing them would have left orders and revenue untouched and lifted every ratio. Instead the removal took revenue out faster than it took traffic out. Caveat worth holding: this is three days against three days, and Aug 6 was August's single best revenue day, so the baseline is flattering. The direction is clear; the magnitude is not yet settled.</p>
       </div>
       <div class="finding refuted">
-        <div class="vt">Withdrawn — this claim was wrong</div>
-        <div class="cl">Our buy box is <em>not</em> unusually far down. It is second-shortest in the set.</div>
-        <p>Two earlier versions of this analysis said our buy box was the furthest down of any brand measured — first “1.7 screens against a set that starts at the top,” then “1.7 against 0.80–0.95.” <strong>Both were wrong.</strong> An automated reader was picking up a hidden element and calling it the buy button. The screenshots contradict it flatly.</p>
-        <p>Photographed screen by screen, the buy button first appears on: <strong>Cheers screen 1 · Super Liver screen 2 · More Labs screen 2 · Grüns screen 3 · The Absorption Company screen 3.</strong> Grüns puts a flavour picker, a sugar-level picker and a quantity picker ahead of its plan tiles; Absorption puts four clinical stat tiles and a challenge banner ahead of theirs.</p>
-        <p>So we are ahead of both brands this report earlier held up as the standard. <strong>Moving the buy box up is not the opportunity here</strong>, and the ticket raised against it should be closed.</p>
+        <div class="vt">Refuted</div>
+        <div class="cl">The pre-July baseline was 3.16%, not the 2.5–3% remembered.</div>
+        <p>Measured sitewide conversion for Jun 8 – Jul 5 is <strong>3.16%</strong>; the spot weeks check out at <strong>3.18%</strong> (Jun 22) and <strong>3.44%</strong> (Jun 29). No day in the June baseline fell below 2.65%. The decline is larger than the remembered baseline implies, not smaller.</p>
+      </div>
+      <div class="finding refuted">
+        <div class="vt">Refuted</div>
+        <div class="cl">AOV is up ~6.5%, not the +26% implied by −40% ÷ −52%.</div>
+        <p>Aligned to one window and one channel (Online Store, week of Aug 3 vs. June baseline): RPS −41.6%, CVR −45.1%, AOV <strong>+6.5%</strong>, reconciling exactly at 0.549 × 1.065 = 0.585. The +26% came from dividing an RPS and a CVR measured over different windows. On Shopify's own <code>average_order_value</code> metric the lift reads +13.8%, since that metric excludes post-order adjustments.</p>
       </div>
       <div class="finding confirmed">
-        <div class="vt">Confirmed — and this is the real gap</div>
-        <div class="cl">Cheers carries a working add-to-cart bar from screen one. We carry a cart icon that cannot add anything.</div>
-        <p>Look at the Cheers screen 1 capture: pinned across the bottom of the very first screen, before any scrolling, is <strong>“Restore — Add to cart for $35.”</strong> The buy decision is available from the first moment and never leaves. The Absorption Company runs the same pattern, appearing deeper in the page.</p>
-        <p>On our page — checked with the pop-up script blocked so the page was fully visible — the only pinned element at any depth is the navigation header. Its cart icon opens the cart drawer; <strong>it cannot add Super Liver to the cart.</strong> On a page <strong>17.2 screens tall</strong>, the research, the comparison table and the results timeline all sit where a reader who has just been convinced cannot act on it.</p>
-        <p><strong>The component already exists.</strong> <code>productStickyATC</code> is present in nine product sections of the theme. <code>main-product.liquid</code> — the section Super Liver actually renders — is the only one without it.</p>
+        <div class="vt">Open — not yet answerable</div>
+        <div class="cl">Cohort LTV cannot judge the June 7 change for about two more weeks.</div>
+        <p>Through month 1 — the only maturity where all three relevant cohorts are complete — the June cohort is <strong>ahead</strong>: $59.34 per customer against $56.17 (May) and $57.65 (April). Initial order value per customer also rose across the same cohorts, $46.03 → $46.32 → $48.38.</p>
+        <p>But month 2 for the June cohort and month 1 for the July cohort both land in August, which is only ~52% elapsed. Neither is readable yet. The first clean month-2 read on a post-change cohort arrives at the start of September.</p>
+        <p>The volume side is not ambiguous. New customers acquired: April 12,527 → May 8,310 → June 9,000 → July 6,406. July is down 29% against June. Slightly better per-customer economics on materially fewer customers is not obviously a win, and whether it nets out depends on what happened to CAC — which is not in this dataset.</p>
       </div>
     </div>
   </div>
 
   <footer class="page">
-    <p>Notes · The week of Aug&nbsp;10 is partial (through Aug&nbsp;16, ~6.6 days) and is drawn hollow throughout; it is excluded from every headline comparison. · Aug&nbsp;9 carries a Google-referrer spike of 6,658 sessions against a ~500/day norm, almost certainly non-human; it depresses that day's conversion to 0.82% and is left in the data unadjusted. · Conversion here is Online Store orders ÷ sessions, which tracks Shopify's <code>conversion_rate</code> closely (1.76% vs. 1.73% for the week of Aug&nbsp;3) and keeps the CVR × AOV decomposition exact.</p>
+    <p>Notes · Aug 16 is a partial day (data pulled midday) and is drawn hollow; ranges ending Aug 16 carry that partial day. · Aug 9 carries a Google-referrer spike of 6,658 sessions against a ~500/day norm, almost certainly non-human; it is left unadjusted and is the true daily RPS low at $0.46. · Conversion is Online Store orders ÷ sessions, which tracks Shopify's <code>conversion_rate</code> closely and keeps the CVR × AOV decomposition exact. · The June baseline ($1.90 RPS, 3.22% CVR, $59.20 AOV) is fixed at Jun 8 – Jul 5 and does not move with the range selector. · Cohort figures use <code>net_sales</code> by <code>customer_cohort_month</code> × <code>months_since_first_purchase</code>; month −1 is the acquiring order.</p>
   </footer>
 
 </div>
@@ -354,493 +270,564 @@
 (function () {
   "use strict";
 
-  // ---- data -------------------------------------------------------------
-  // Online Store (web) channel, Monday-start weeks. Sessions are sitewide
-  // online-store sessions (the web denominator).
-  var WEEKS = [
-    { w: "Jun 8",  rev: 118285.02, ord: 2038, ses: 65788, partial: false },
-    { w: "Jun 15", rev: 130699.16, ord: 2227, ses: 71227, partial: false },
-    { w: "Jun 22", rev: 115564.01, ord: 1929, ses: 60007, partial: false },
-    { w: "Jun 29", rev: 111486.35, ord: 1847, ses: 53052, partial: false },
-    { w: "Jul 6",  rev:  90561.34, ord: 1484, ses: 58942, partial: false },
-    { w: "Jul 13", rev:  70093.28, ord: 1085, ses: 46387, partial: false },
-    { w: "Jul 20", rev:  76773.34, ord: 1171, ses: 55329, partial: false },
-    { w: "Jul 27", rev:  69428.72, ord: 1076, ses: 60545, partial: false },
-    { w: "Aug 3",  rev:  63955.40, ord: 1014, ses: 57487, partial: false },
-    { w: "Aug 10", rev:  47247.00, ord:  799, ses: 49544, partial: true  }
-  ];
-  WEEKS.forEach(function (d) {
-    d.rps = d.rev / d.ses;
-    d.cvr = d.ord / d.ses;
-    d.aov = d.rev / d.ord;
+  // ============ DATA ============
+  // d, sessions, cartAdds, reachedCheckout, completedCheckout, webRev, webOrders
+  var RAW = [
+["2026-06-07",8870,596,486,254,14862.72,255],["2026-06-08",10451,719,604,341,20220.60,343],
+["2026-06-09",8903,560,476,236,14142.97,238],["2026-06-10",10046,633,551,304,17779.63,306],
+["2026-06-11",10222,708,592,312,18038.78,312],["2026-06-12",8465,607,513,260,14466.50,260],
+["2026-06-13",8276,605,528,275,17443.13,279],["2026-06-14",9425,662,578,298,16193.41,300],
+["2026-06-15",8675,617,533,263,16302.51,271],["2026-06-16",8334,606,545,274,16529.02,282],
+["2026-06-17",8719,647,526,270,17268.08,276],["2026-06-18",9995,733,631,357,21248.71,357],
+["2026-06-19",10390,710,624,337,19570.29,344],["2026-06-20",13391,868,721,357,20327.71,361],
+["2026-06-21",11723,733,616,329,19452.84,336],["2026-06-22",11265,822,667,335,19193.25,337],
+["2026-06-23",9329,665,533,264,16742.59,264],["2026-06-24",7588,580,494,249,15293.67,252],
+["2026-06-25",8695,679,579,305,18413.14,307],["2026-06-26",7384,528,468,247,15181.62,251],
+["2026-06-27",7679,568,471,256,16036.64,261],["2026-06-28",8067,541,468,253,14703.10,257],
+["2026-06-29",6685,479,403,227,13715.47,227],["2026-06-30",6252,476,424,228,13189.82,233],
+["2026-07-01",7781,619,517,273,16881.35,278],["2026-07-02",8252,722,646,307,18829.09,309],
+["2026-07-03",8043,624,541,264,16552.29,267],["2026-07-04",7772,560,472,246,15301.41,249],
+["2026-07-05",8267,616,552,278,17016.92,284],["2026-07-06",8454,566,479,259,15181.08,261],
+["2026-07-07",8384,721,585,219,14128.59,224],["2026-07-08",9223,816,622,211,12236.14,212],
+["2026-07-09",8938,896,714,234,14195.15,239],["2026-07-10",7082,606,490,169,11005.24,172],
+["2026-07-11",8542,608,445,174,11636.29,175],["2026-07-12",8319,645,512,198,12178.85,201],
+["2026-07-13",7702,543,420,171,10844.25,177],["2026-07-14",6518,497,388,135,8857.98,139],
+["2026-07-15",5900,527,370,145,10159.38,146],["2026-07-16",6989,567,425,166,10331.32,169],
+["2026-07-17",6941,546,408,164,11280.48,169],["2026-07-18",5993,486,362,141,9813.18,145],
+["2026-07-19",6344,443,349,138,8806.69,140],["2026-07-20",7553,509,395,149,10022.88,150],
+["2026-07-21",7226,504,381,136,9888.98,142],["2026-07-22",7287,610,444,176,11096.32,178],
+["2026-07-23",7443,531,415,160,10193.92,160],["2026-07-24",8825,564,449,167,10518.06,170],
+["2026-07-25",8122,508,390,163,11822.49,164],["2026-07-26",8873,596,450,203,13230.69,207],
+["2026-07-27",10335,575,448,188,11015.95,192],["2026-07-28",11414,740,405,142,10228.13,143],
+["2026-07-29",8758,547,388,134,9199.01,139],["2026-07-30",8599,628,382,147,9902.07,149],
+["2026-07-31",7507,518,453,181,11130.38,182],["2026-08-01",6432,476,371,140,8534.37,143],
+["2026-08-02",7500,433,361,127,9418.81,128],["2026-08-03",7635,485,352,134,8195.13,138],
+["2026-08-04",6276,392,306,122,8249.58,125],["2026-08-05",6777,378,276,139,9401.88,145],
+["2026-08-06",8176,595,443,195,12750.27,197],["2026-08-07",8220,479,381,169,10998.43,169],
+["2026-08-08",7064,394,312,127,8173.33,129],["2026-08-09",13339,331,240,110,6186.78,111],
+["2026-08-10",8964,345,273,105,6265.90,107],["2026-08-11",9396,375,262,127,7703.83,127],
+["2026-08-12",7725,394,274,130,7795.97,129],["2026-08-13",6181,335,254,120,7062.69,122],
+["2026-08-14",6109,364,261,112,6439.51,115],["2026-08-15",6818,377,279,130,8064.52,131],
+["2026-08-16",4351,196,135,67,4141.38,73]
+  ].map(function (r) {
+    return { d: r[0], ses: r[1], cart: r[2], chk: r[3], comp: r[4], rev: r[5], ord: r[6],
+             partial: r[0] === "2026-08-16" };
   });
 
-  // June baseline = first four complete weeks (Jun 8 - Jul 5)
-  var BASE = (function () {
-    var b = WEEKS.slice(0, 4).reduce(function (a, d) {
-      a.rev += d.rev; a.ord += d.ord; a.ses += d.ses; return a;
-    }, { rev: 0, ord: 0, ses: 0 });
-    return { rps: b.rev / b.ses, cvr: b.ord / b.ses, aov: b.rev / b.ord, rev: b.rev / 4, ses: b.ses / 4 };
-  })();
+  var REF = {
+"2026-07-20":[2380,3500,1032],"2026-07-21":[2055,3516,1098],"2026-07-22":[2221,3541,991],
+"2026-07-23":[2317,3486,1132],"2026-07-24":[2923,3869,1579],"2026-07-25":[2227,3757,1656],
+"2026-07-26":[2423,4280,1532],"2026-07-27":[2630,5447,1537],"2026-07-28":[4208,5078,1280],
+"2026-07-29":[3535,3596,1134],"2026-07-30":[4189,2878,875],"2026-07-31":[3521,2904,522],
+"2026-08-01":[2989,2300,669],"2026-08-02":[3455,2594,741],"2026-08-03":[3884,2332,623],
+"2026-08-04":[2951,1922,636],"2026-08-05":[2864,2144,1060],"2026-08-06":[3771,2685,1083],
+"2026-08-07":[3460,2922,1223],"2026-08-08":[3162,2311,1052],"2026-08-09":[3383,2208,957],
+"2026-08-10":[3730,3041,909],"2026-08-11":[3758,3731,1149],"2026-08-12":[3170,2830,918],
+"2026-08-13":[2115,2408,942],"2026-08-14":[1838,2665,955],"2026-08-15":[2869,2493,775]
+  };
 
-  // Daily sessions by referrer bucket, Jul 20 - Aug 15 (Aug 16 partial, omitted)
-  var DAILY = [
-    ["Jul 20", 2380, 3500, 1032], ["Jul 21", 2055, 3516, 1098], ["Jul 22", 2221, 3541,  991],
-    ["Jul 23", 2317, 3486, 1132], ["Jul 24", 2923, 3869, 1579], ["Jul 25", 2227, 3757, 1656],
-    ["Jul 26", 2423, 4280, 1532], ["Jul 27", 2630, 5447, 1537], ["Jul 28", 4208, 5078, 1280],
-    ["Jul 29", 3535, 3596, 1134], ["Jul 30", 4189, 2878,  875], ["Jul 31", 3521, 2904,  522],
-    ["Aug 1",  2989, 2300,  669], ["Aug 2",  3455, 2594,  741], ["Aug 3",  3884, 2332,  623],
-    ["Aug 4",  2951, 1922,  636], ["Aug 5",  2864, 2144, 1060], ["Aug 6",  3771, 2685, 1083],
-    ["Aug 7",  3460, 2922, 1223], ["Aug 8",  3162, 2311, 1052], ["Aug 9",  3383, 2208,  957],
-    ["Aug 10", 3730, 3041,  909], ["Aug 11", 3758, 3731, 1149], ["Aug 12", 3170, 2830,  918],
-    ["Aug 13", 2115, 2408,  942], ["Aug 14", 1838, 2665,  955], ["Aug 15", 2869, 2493,  775]
-  ].map(function (r) { return { d: r[0], direct: r[1], ig: r[2], fb: r[3] }; });
-
-  var EH_INDEX = DAILY.findIndex(function (r) { return r.d === "Aug 13"; });
-
-  // Mobile sessions by traffic source, last 30 days to 2026-08-16.
-  // Shopify ShopifyQL: FROM sessions ... GROUP BY utm_source, utm_medium
-  // WHERE session_device_type = 'mobile'. Ordered by conversion rate.
-  var SRC = [
-    { name: "Klaviyo — email",      short: "Email",    ses: 2827,   atc: 19.70, cvr: 8.17 },
-    { name: "Postscript — SMS",     short: "SMS",      ses: 4648,   atc: 16.12, cvr: 6.28 },
-    { name: "Instagram — organic",  short: "IG organic", ses: 2446, atc: 13.90, cvr: 5.31 },
-    { name: "Untagged / direct",    short: "Direct",   ses: 50426,  atc: 5.42,  cvr: 2.34 },
-    { name: "Facebook — paid",      short: "FB paid",  ses: 154371, atc: 5.09,  cvr: 1.48 },
-    { name: "Axon — paid",          short: "Axon",     ses: 6824,   atc: 1.71,  cvr: 0.63 },
-    { name: "Snapchat — paid",      short: "Snapchat", ses: 547,    atc: 0.55,  cvr: 0.18 }
+  var COHORTS = [
+    { m: "Apr 2026", customers: 12527, v: { "-1": 580206.70, "0": 8076.30, "1": 133850.37, "2": 79326.00, "3": 84701.67, "4": 24640.97 }, lastComplete: 3, tag: "pre-change" },
+    { m: "May 2026", customers:  8310, v: { "-1": 382497.92, "0": 5136.45, "1":  79182.61, "2": 55226.53, "3": 25990.81 }, lastComplete: 2, tag: "pre-change" },
+    { m: "Jun 2026", customers:  9000, v: { "-1": 435420.16, "0": 6313.20, "1":  92355.54, "2": 29192.21 }, lastComplete: 1, tag: "~77% post-change" },
+    { m: "Jul 2026", customers:  6406, v: { "-1": 323739.16, "0": 4625.26, "1":  34974.35 }, lastComplete: 0, tag: "fully post-change" }
   ];
 
-  // Live browser measurement at 390x844, 2026-08-16, VERIFIED BY EYE.
-  // Two earlier automated passes reported buy-box positions that the screenshots
-  // contradicted — a hidden element was being read as the buy button. These values
-  // are the screen on which the real buy button is actually visible in the capture,
-  // and every screen is published in evidence.html so the numbers can be checked.
-  var PAGES = [
-    { name: "Cheers Restore", short: "Cheers", buybox: 1, tall: 17.9,
-      popup: "1.5s", cover: "100%", sticky: "yes — from screen 1" },
-    { name: "Super Liver (ours)", short: "Super Liver", buybox: 2, tall: 17.2,
-      popup: "0.0s", cover: "100%", sticky: "no" },
-    { name: "More Labs", short: "More Labs", buybox: 2, tall: 13.4,
-      popup: "none", cover: "—", sticky: "no" },
-    { name: "Grüns", short: "Grüns", buybox: 3, tall: 18.2,
-      popup: "2.25s", cover: "100%", sticky: "no" },
-    { name: "The Absorption Company", short: "Absorption", buybox: 3, tall: 15.3,
-      popup: "0.0s", cover: "43% (cookie notice)", sticky: "yes — appears deeper" }
-  ];
+  var EH_DATE = "2026-08-13", CHANGE_DATE = "2026-06-07";
+  var BASE_FROM = "2026-06-08", BASE_TO = "2026-07-05";
+  var MIN = RAW[0].d, MAX = RAW[RAW.length - 1].d;
 
-  // ---- helpers ----------------------------------------------------------
+  function agg(rows) {
+    var a = rows.reduce(function (s, r) {
+      s.ses += r.ses; s.cart += r.cart; s.chk += r.chk; s.comp += r.comp; s.rev += r.rev; s.ord += r.ord; return s;
+    }, { ses: 0, cart: 0, chk: 0, comp: 0, rev: 0, ord: 0 });
+    a.rps = a.ses ? a.rev / a.ses : 0;
+    a.cvr = a.ses ? a.ord / a.ses : 0;
+    a.aov = a.ord ? a.rev / a.ord : 0;
+    a.days = rows.length;
+    a.hasPartial = rows.some(function (r) { return r.partial; });
+    return a;
+  }
+  var BASE = agg(RAW.filter(function (r) { return r.d >= BASE_FROM && r.d <= BASE_TO; }));
+
   var NS = "http://www.w3.org/2000/svg";
-  function el(n, attrs, txt) {
-    var e = document.createElementNS(NS, n);
-    for (var k in attrs) if (attrs[k] != null) e.setAttribute(k, attrs[k]);
-    if (txt != null) e.textContent = txt;
-    return e;
-  }
-  function css(name) {
-    return getComputedStyle(document.querySelector(".viz-root")).getPropertyValue(name).trim();
-  }
-  var money = function (v, dp) { return "$" + v.toFixed(dp == null ? 2 : dp).replace(/\B(?=(\d{3})+(?!\d))/g, ","); };
-  var num = function (v) { return Math.round(v).toLocaleString("en-US"); };
-  var pct = function (v) { return (v * 100).toFixed(2) + "%"; };
+  function el(n, a, t) { var e = document.createElementNS(NS, n); for (var k in a) if (a[k] != null) e.setAttribute(k, a[k]); if (t != null) e.textContent = t; return e; }
+  function css(v) { return getComputedStyle(document.querySelector(".viz-root")).getPropertyValue(v).trim(); }
+  function money(v, dp) { return "$" + v.toFixed(dp == null ? 2 : dp).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function num(v) { return Math.round(v).toLocaleString("en-US"); }
+  function pct(v) { return (v * 100).toFixed(2) + "%"; }
   function signed(v) { return (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(1) + "%"; }
+  function cls(v) { return v > 0.5 ? "up" : v < -0.5 ? "down" : "flat"; }
+  function fmtD(iso) {
+    var p = iso.split("-"), M = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return M[+p[1] - 1] + " " + (+p[2]);
+  }
+  function fmtDY(iso) { return fmtD(iso) + ", " + iso.split("-")[0]; }
+  function weekKey(iso) {
+    var t = Date.UTC(+iso.slice(0,4), +iso.slice(5,7) - 1, +iso.slice(8,10));
+    var dow = new Date(t).getUTCDay();
+    var back = (dow + 6) % 7;
+    return new Date(t - back * 86400000).toISOString().slice(0, 10);
+  }
 
-  // ---- generic line chart -----------------------------------------------
-  // series: [{ key, name, color, values:[], fmt }]
-  function lineChart(host, tipEl, opts) {
-    var W = 1000, H = opts.height || 330;
-    var M = { t: 18, r: opts.right || 74, b: 42, l: opts.left || 56 };
-    var pw = W - M.l - M.r, ph = H - M.t - M.b;
-    var labels = opts.labels, series = opts.series, n = labels.length;
+  var state = { from: MIN, to: MAX, gran: "day", preset: "all" };
+  function inRange(r) { return r.d >= state.from && r.d <= state.to; }
+  function selected() { return RAW.filter(inRange); }
 
-    var lo = opts.min, hi = opts.max;
+  function buckets() {
+    var rows = selected();
+    if (state.gran === "day") {
+      return rows.map(function (r) { return { key: r.d, label: fmtD(r.d), rows: [r], a: agg([r]), partial: r.partial }; });
+    }
+    var map = new Map();
+    rows.forEach(function (r) {
+      var k = weekKey(r.d);
+      if (!map.has(k)) map.set(k, []);
+      map.get(k).push(r);
+    });
+    return Array.from(map.entries()).map(function (e) {
+      var a = agg(e[1]);
+      return { key: e[0], label: fmtD(e[0]), rows: e[1], a: a, partial: a.hasPartial || e[1].length < 7 };
+    });
+  }
+
+  function lineChart(host, tipEl, o) {
+    var W = 1000, H = o.height || 320;
+    var M = { t: 18, r: o.right || 78, b: 42, l: o.left || 58 };
+    var pw = W - M.l - M.r, ph = H - M.t - M.b, n = o.labels.length;
+    if (!n) { host.innerHTML = '<p style="font-size:12.5px;color:var(--muted);padding:24px 0">No data in the selected range.</p>'; return; }
     var x = function (i) { return M.l + (n === 1 ? pw / 2 : (pw * i) / (n - 1)); };
-    var y = function (v) { return M.t + ph - ((v - lo) / (hi - lo)) * ph; };
+    var y = function (v) { return M.t + ph - ((v - o.min) / (o.max - o.min)) * ph; };
 
     host.innerHTML = "";
-    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": opts.aria });
-
-    // gridlines + y ticks
-    opts.ticks.forEach(function (tv) {
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": o.aria });
+    // only draw ticks inside the plot band, else they land under the x-axis labels
+    o.ticks.filter(function (tv) { return tv >= o.min && tv <= o.max; }).forEach(function (tv) {
       svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(tv), y2: y(tv), class: "grid-line" }));
-      svg.appendChild(el("text", { x: M.l - 10, y: y(tv) + 4, "text-anchor": "end", class: "tick" }, opts.tickFmt(tv)));
+      svg.appendChild(el("text", { x: M.l - 10, y: y(tv) + 4, "text-anchor": "end", class: "tick" }, o.tickFmt(tv)));
     });
-
-    // reference line
-    if (opts.ref != null) {
-      svg.appendChild(el("line", {
-        x1: M.l, x2: M.l + pw, y1: y(opts.ref), y2: y(opts.ref),
-        stroke: css("--axis"), "stroke-width": 1
-      }));
-      svg.appendChild(el("text", { x: M.l + 6, y: y(opts.ref) - 7, class: "anno" }, opts.refLabel));
+    if (o.ref != null && o.ref >= o.min && o.ref <= o.max) {
+      svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(o.ref), y2: y(o.ref), stroke: css("--axis"), "stroke-width": 1 }));
+      svg.appendChild(el("text", { x: M.l + 6, y: y(o.ref) - 7, class: "anno" }, o.refLabel));
     }
-
-    // event marker
-    if (opts.marker != null) {
-      var mx = x(opts.marker.i);
+    (o.markers || []).forEach(function (mk) {
+      if (mk.i < 0 || mk.i >= n) return;
+      var mx = x(mk.i);
       svg.appendChild(el("line", { x1: mx, x2: mx, y1: M.t, y2: M.t + ph, stroke: css("--critical"), "stroke-width": 1 }));
-      var ml = el("text", { x: mx + 7, y: M.t + 13, class: "anno", fill: css("--critical") }, opts.marker.label);
-      svg.appendChild(ml);
-    }
-
-    // baseline
+      var anchor = mk.i > n * 0.7 ? "end" : "start";
+      svg.appendChild(el("text", { x: mx + (anchor === "end" ? -6 : 6), y: M.t + 12 + (mk.row || 0) * 13,
+        "text-anchor": anchor, class: "anno", fill: css("--critical") }, mk.label));
+    });
     svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: M.t + ph, y2: M.t + ph, class: "axis-line" }));
 
-    // x ticks
-    labels.forEach(function (lb, i) {
-      if (opts.everyOther && i % 2 !== 0 && i !== n - 1) return;
+    var step = Math.max(1, Math.ceil(n / 12));
+    o.labels.forEach(function (lb, i) {
+      if (i % step !== 0 && i !== n - 1) return;
       svg.appendChild(el("text", { x: x(i), y: M.t + ph + 20, "text-anchor": "middle", class: "tick" }, lb));
     });
 
-    // series paths
-    var endLabels = [];
-    series.forEach(function (s) {
-      var solid = [], dashed = null;
-      s.values.forEach(function (v, i) { solid.push((i ? "L" : "M") + x(i) + " " + y(v)); });
-      if (opts.partialFrom != null && opts.partialFrom > 0) {
-        var pf = opts.partialFrom;
-        solid = s.values.slice(0, pf).map(function (v, i) { return (i ? "L" : "M") + x(i) + " " + y(v); });
-        dashed = "M" + x(pf - 1) + " " + y(s.values[pf - 1]) + " L" + x(pf) + " " + y(s.values[pf]);
+    var ends = [];
+    o.series.forEach(function (s) {
+      var pf = o.partialFrom;
+      var solidPts = (pf != null && pf > 0 && pf < n) ? s.values.slice(0, pf) : s.values;
+      svg.appendChild(el("path", { d: solidPts.map(function (v, i) { return (i ? "L" : "M") + x(i) + " " + y(v); }).join(" "),
+        fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      if (pf != null && pf > 0 && pf < n) {
+        svg.appendChild(el("path", { d: "M" + x(pf - 1) + " " + y(s.values[pf - 1]) + " L" + x(pf) + " " + y(s.values[pf]),
+          fill: "none", stroke: s.color, "stroke-width": 2, "stroke-dasharray": "4 4", "stroke-linecap": "round" }));
       }
-      svg.appendChild(el("path", {
-        d: solid.join(" "), fill: "none", stroke: s.color, "stroke-width": 2,
-        "stroke-linejoin": "round", "stroke-linecap": "round"
-      }));
-      if (dashed) {
-        svg.appendChild(el("path", {
-          d: dashed, fill: "none", stroke: s.color, "stroke-width": 2,
-          "stroke-dasharray": "4 4", "stroke-linecap": "round"
-        }));
-      }
-      // endpoint marker + direct label
-      var li = s.values.length - 1;
-      var isPartial = opts.partialFrom != null && li >= opts.partialFrom;
-      svg.appendChild(el("circle", {
-        cx: x(li), cy: y(s.values[li]), r: 5,
-        fill: isPartial ? css("--surface-1") : s.color,
-        stroke: isPartial ? s.color : css("--surface-1"), "stroke-width": 2
-      }));
-      endLabels.push({ x: x(li) + 11, y: y(s.values[li]) + 4, text: s.fmt(s.values[li]) });
+      var li = n - 1, isP = pf != null && li >= pf;
+      svg.appendChild(el("circle", { cx: x(li), cy: y(s.values[li]), r: 5, fill: isP ? css("--surface-1") : s.color, stroke: isP ? s.color : css("--surface-1"), "stroke-width": 2 }));
+      ends.push({ x: x(li) + 11, y: y(s.values[li]) + 4, text: s.fmt(s.values[li]) });
     });
+    ends.sort(function (a, b) { return a.y - b.y; });
+    for (var q = 1; q < ends.length; q++) if (ends[q].y - ends[q - 1].y < 15) ends[q].y = ends[q - 1].y + 15;
+    ends.forEach(function (L) { svg.appendChild(el("text", { x: L.x, y: L.y, class: "dlabel", fill: css("--text-primary") }, L.text)); });
 
-    // de-collide direct labels, then draw them
-    endLabels.sort(function (a, b) { return a.y - b.y; });
-    for (var q = 1; q < endLabels.length; q++) {
-      var gap = endLabels[q].y - endLabels[q - 1].y;
-      if (gap < 15) endLabels[q].y = endLabels[q - 1].y + 15;
-    }
-    endLabels.forEach(function (L) {
-      svg.appendChild(el("text", { x: L.x, y: L.y, class: "dlabel", fill: css("--text-primary") }, L.text));
-    });
-
-    // hover layer
     var focus = el("g", { opacity: 0 });
     var vline = el("line", { y1: M.t, y2: M.t + ph, stroke: css("--axis"), "stroke-width": 1 });
     focus.appendChild(vline);
-    var dots = series.map(function (s) {
-      var c = el("circle", { r: 5, fill: s.color, stroke: css("--surface-1"), "stroke-width": 2 });
-      focus.appendChild(c); return c;
-    });
+    var dots = o.series.map(function (s) { var c = el("circle", { r: 5, fill: s.color, stroke: css("--surface-1"), "stroke-width": 2 }); focus.appendChild(c); return c; });
     svg.appendChild(focus);
     var hit = el("rect", { x: M.l, y: M.t, width: pw, height: ph, fill: "transparent" });
-    svg.appendChild(hit);
-    host.appendChild(svg);
-
-    function idxFromEvent(ev) {
-      var r = svg.getBoundingClientRect();
-      var px = ((ev.clientX - r.left) / r.width) * W;
-      var i = Math.round(((px - M.l) / pw) * (n - 1));
-      return Math.max(0, Math.min(n - 1, i));
-    }
-    function show(ev) {
-      var i = idxFromEvent(ev);
-      focus.setAttribute("opacity", 1);
-      vline.setAttribute("x1", x(i)); vline.setAttribute("x2", x(i));
-      dots.forEach(function (c, k) { c.setAttribute("cx", x(i)); c.setAttribute("cy", y(series[k].values[i])); });
-      var html = '<div class="th">' + labels[i] + (opts.thSuffix || "") + "</div>";
-      series.forEach(function (s) {
-        html += '<div class="row"><span class="sw" style="background:' + s.color + '"></span>' +
-                '<span class="nm">' + s.name + '</span><span class="vl">' + s.fmt(s.values[i]) + "</span></div>";
-      });
-      if (opts.partialFrom != null && i >= opts.partialFrom) html += '<div class="pt">Partial week — through Aug 16</div>';
-      if (opts.tipNote) { var extra = opts.tipNote(i); if (extra) html += '<div class="pt">' + extra + "</div>"; }
-      tipEl.innerHTML = html;
-      tipEl.style.opacity = 1;
-      var box = host.getBoundingClientRect();
-      var relX = (x(i) / W) * box.width;
-      var tw = tipEl.offsetWidth;
-      tipEl.style.left = Math.max(0, Math.min(box.width - tw, relX - tw / 2)) + "px";
-      tipEl.style.top = "8px";
-    }
-    hit.addEventListener("mousemove", show);
-    hit.addEventListener("mouseleave", function () {
-      focus.setAttribute("opacity", 0); tipEl.style.opacity = 0;
-    });
-  }
-
-  // ---- generic bar chart ------------------------------------------------
-  function barChart(host, tipEl, opts) {
-    var W = 1000, H = 300;
-    var M = { t: 18, r: 20, b: 42, l: 66 };
-    var pw = W - M.l - M.r, ph = H - M.t - M.b;
-    var vals = opts.values, labels = opts.labels, n = vals.length;
-    var hi = opts.max;
-    var slot = pw / n, bw = Math.min(56, slot - 12);
-    var y = function (v) { return M.t + ph - (v / hi) * ph; };
-    var cx = function (i) { return M.l + slot * i + slot / 2; };
-
-    host.innerHTML = "";
-    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": opts.aria });
-
-    opts.ticks.forEach(function (tv) {
-      svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(tv), y2: y(tv), class: "grid-line" }));
-      svg.appendChild(el("text", { x: M.l - 10, y: y(tv) + 4, "text-anchor": "end", class: "tick" }, opts.tickFmt(tv)));
-    });
-    if (opts.ref != null) {
-      svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(opts.ref), y2: y(opts.ref), stroke: css("--axis"), "stroke-width": 1 }));
-      svg.appendChild(el("text", { x: M.l + 6, y: y(opts.ref) - 7, class: "anno" }, opts.refLabel));
-    }
-    svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: M.t + ph, y2: M.t + ph, class: "axis-line" }));
-
-    var color = css("--series-1");
-    vals.forEach(function (v, i) {
-      var isPartial = opts.partialFrom != null && i >= opts.partialFrom;
-      var h = Math.max(4, M.t + ph - y(v));
-      var r = el("path", {
-        d: roundedTopRect(cx(i) - bw / 2, y(v), bw, h, 4),
-        fill: isPartial ? "none" : color,
-        stroke: isPartial ? color : "none",
-        "stroke-width": isPartial ? 2 : 0,
-        "stroke-dasharray": isPartial ? "4 4" : null
-      });
-      svg.appendChild(r);
-      svg.appendChild(el("text", { x: cx(i), y: M.t + ph + 20, "text-anchor": "middle", class: "tick" }, labels[i]));
-    });
-
-    var hit = el("rect", { x: M.l, y: M.t, width: pw, height: ph, fill: "transparent" });
-    svg.appendChild(hit);
-    host.appendChild(svg);
+    svg.appendChild(hit); host.appendChild(svg);
 
     hit.addEventListener("mousemove", function (ev) {
-      var rct = svg.getBoundingClientRect();
-      var px = ((ev.clientX - rct.left) / rct.width) * W;
-      var i = Math.max(0, Math.min(n - 1, Math.floor((px - M.l) / slot)));
-      var vfmt = opts.valueFmt || function (v) { return money(v, 0); };
-      var html = '<div class="th">' + (opts.thPrefix != null ? opts.thPrefix : "Week of ") + labels[i] + "</div>" +
-        '<div class="row"><span class="sw" style="background:' + color + '"></span>' +
-        '<span class="nm">' + (opts.seriesName || "Web revenue") + '</span><span class="vl">' + vfmt(vals[i]) + "</span></div>";
-      if (opts.ref != null) {
-        html += '<div class="row"><span class="sw" style="background:transparent"></span>' +
-          '<span class="nm">vs. June baseline</span><span class="vl">' + signed((vals[i] / opts.ref - 1) * 100) + "</span></div>";
-      }
-      if (opts.tipNote) {
-        html += '<div class="row"><span class="sw" style="background:transparent"></span>' +
-          '<span class="nm">' + opts.tipNote(i).nm + '</span><span class="vl">' + opts.tipNote(i).vl + "</span></div>";
-      }
-      if (opts.partialFrom != null && i >= opts.partialFrom) html += '<div class="pt">Partial week — through Aug 16</div>';
-      tipEl.innerHTML = html;
-      tipEl.style.opacity = 1;
-      var box = host.getBoundingClientRect();
-      var relX = (cx(i) / W) * box.width, tw = tipEl.offsetWidth;
+      var rc = svg.getBoundingClientRect();
+      var px = ((ev.clientX - rc.left) / rc.width) * W;
+      var i = Math.max(0, Math.min(n - 1, Math.round(((px - M.l) / pw) * (n - 1))));
+      focus.setAttribute("opacity", 1);
+      vline.setAttribute("x1", x(i)); vline.setAttribute("x2", x(i));
+      dots.forEach(function (c, k) { c.setAttribute("cx", x(i)); c.setAttribute("cy", y(o.series[k].values[i])); });
+      var html = '<div class="th">' + (o.tipTitle ? o.tipTitle(i) : o.labels[i]) + "</div>";
+      o.series.forEach(function (s) {
+        html += '<div class="row"><span class="sw" style="background:' + s.color + '"></span><span class="nm">' + s.name + '</span><span class="vl">' + s.fmt(s.values[i]) + "</span></div>";
+      });
+      if (o.tipNote) { var x2 = o.tipNote(i); if (x2) html += '<div class="pt">' + x2 + "</div>"; }
+      tipEl.innerHTML = html; tipEl.style.opacity = 1;
+      var box = host.getBoundingClientRect(), relX = (x(i) / W) * box.width, tw = tipEl.offsetWidth;
       tipEl.style.left = Math.max(0, Math.min(box.width - tw, relX - tw / 2)) + "px";
-      tipEl.style.top = "8px";
+      tipEl.style.top = "6px";
+    });
+    hit.addEventListener("mouseleave", function () { focus.setAttribute("opacity", 0); tipEl.style.opacity = 0; });
+  }
+
+  function groupedBars(host, tipEl, o) {
+    var W = 1000, H = 300, M = { t: 18, r: 20, b: 52, l: 62 };
+    var pw = W - M.l - M.r, ph = H - M.t - M.b;
+    var g = o.groups.length, s = o.series.length;
+    var slot = pw / g, bw = Math.min(46, (slot - 24) / s);
+    var y = function (v) { return M.t + ph - (v / o.max) * ph; };
+    host.innerHTML = "";
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": o.aria });
+    o.ticks.forEach(function (tv) {
+      svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(tv), y2: y(tv), class: "grid-line" }));
+      svg.appendChild(el("text", { x: M.l - 10, y: y(tv) + 4, "text-anchor": "end", class: "tick" }, o.tickFmt(tv)));
+    });
+    if (o.ref != null) {
+      svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(o.ref), y2: y(o.ref), stroke: css("--axis"), "stroke-width": 1 }));
+      svg.appendChild(el("text", { x: M.l + 6, y: y(o.ref) - 7, class: "anno" }, o.refLabel));
+    }
+    svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: M.t + ph, y2: M.t + ph, class: "axis-line" }));
+    o.groups.forEach(function (gl, gi) {
+      var cx = M.l + slot * gi + slot / 2, total = s * bw + (s - 1) * 2;
+      o.series.forEach(function (sr, si) {
+        var bx = cx - total / 2 + si * (bw + 2), v = sr.values[gi];
+        svg.appendChild(el("path", { d: topRect(bx, y(v), bw, M.t + ph - y(v), 4), fill: sr.color }));
+      });
+      svg.appendChild(el("text", { x: cx, y: M.t + ph + 20, "text-anchor": "middle", class: "tick" }, gl));
+      if (o.sublabels) svg.appendChild(el("text", { x: cx, y: M.t + ph + 36, "text-anchor": "middle", class: "anno" }, o.sublabels[gi]));
+    });
+    var hit = el("rect", { x: M.l, y: M.t, width: pw, height: ph, fill: "transparent" });
+    svg.appendChild(hit); host.appendChild(svg);
+    hit.addEventListener("mousemove", function (ev) {
+      var rc = svg.getBoundingClientRect(), px = ((ev.clientX - rc.left) / rc.width) * W;
+      var gi = Math.max(0, Math.min(g - 1, Math.floor((px - M.l) / slot)));
+      var html = '<div class="th">' + o.groups[gi] + "</div>";
+      o.series.forEach(function (sr) {
+        html += '<div class="row"><span class="sw" style="background:' + sr.color + '"></span><span class="nm">' + sr.name + '</span><span class="vl">' + sr.fmt(sr.values[gi]) + "</span></div>";
+      });
+      if (o.tipNote) { var e2 = o.tipNote(gi); if (e2) html += '<div class="pt">' + e2 + "</div>"; }
+      tipEl.innerHTML = html; tipEl.style.opacity = 1;
+      var box = host.getBoundingClientRect(), relX = ((M.l + slot * gi + slot / 2) / W) * box.width, tw = tipEl.offsetWidth;
+      tipEl.style.left = Math.max(0, Math.min(box.width - tw, relX - tw / 2)) + "px";
+      tipEl.style.top = "6px";
     });
     hit.addEventListener("mouseleave", function () { tipEl.style.opacity = 0; });
   }
-  function roundedTopRect(x, y, w, h, r) {
-    r = Math.min(r, w / 2, h);
-    return "M" + x + " " + (y + h) + " L" + x + " " + (y + r) +
-           " Q" + x + " " + y + " " + (x + r) + " " + y +
-           " L" + (x + w - r) + " " + y +
-           " Q" + (x + w) + " " + y + " " + (x + w) + " " + (y + r) +
-           " L" + (x + w) + " " + (y + h) + " Z";
+  function topRect(x, y, w, h, r) {
+    h = Math.max(h, 2); r = Math.min(r, w / 2, h);
+    return "M" + x + " " + (y + h) + " L" + x + " " + (y + r) + " Q" + x + " " + y + " " + (x + r) + " " + y +
+      " L" + (x + w - r) + " " + y + " Q" + (x + w) + " " + y + " " + (x + w) + " " + (y + r) +
+      " L" + (x + w) + " " + (y + h) + " Z";
   }
 
-  // ---- legends & tables --------------------------------------------------
   function legend(host, items) {
-    host.innerHTML = items.map(function (it) {
-      return '<span class="item"><span class="swatch" style="background:' + it.color + '"></span>' + it.name + "</span>";
+    host.innerHTML = items.map(function (i) { return '<span class="item"><span class="swatch" style="background:' + i.color + '"></span>' + i.name + "</span>"; }).join("");
+  }
+  function table(host, cap, head, rows) {
+    host.innerHTML = "<table><caption>" + cap + "</caption><thead><tr>" +
+      head.map(function (c) { return "<th scope='col'>" + c + "</th>"; }).join("") + "</tr></thead><tbody>" +
+      rows.map(function (r) { return "<tr>" + r.map(function (c, i) { return i === 0 ? "<th scope='row'>" + c + "</th>" : "<td>" + c + "</td>"; }).join("") + "</tr>"; }).join("") +
+      "</tbody></table>";
+  }
+  function niceMax(v) { var p = Math.pow(10, Math.floor(Math.log10(v))); return Math.ceil(v / (p / 2)) * (p / 2); }
+
+  function render() {
+    var s1 = css("--series-1"), s2 = css("--series-2"), s3 = css("--series-3"), s4 = css("--series-4");
+    var B = buckets(), sel = agg(selected());
+
+    var nDays = selected().length;
+    document.getElementById("rangeOut").innerHTML =
+      "<b>" + fmtDY(state.from) + "</b> to <b>" + fmtDY(state.to) + "</b> · " + nDays + " days · " + B.length + " " + (state.gran === "day" ? "daily" : "weekly") + " points";
+    var tag = fmtD(state.from) + " – " + fmtD(state.to);
+    ["rt1", "rt2", "rt5"].forEach(function (id) { var e = document.getElementById(id); if (e) e.textContent = "Showing " + tag; });
+
+    document.getElementById("heroFig").textContent = money(sel.rps);
+    document.getElementById("heroLab").textContent = "Web revenue per session — " + tag + (sel.hasPartial ? " (includes partial Aug 16)" : "");
+    var dRps = (sel.rps / BASE.rps - 1) * 100;
+    var hd = document.getElementById("heroDelta");
+    hd.textContent = signed(dRps); hd.className = "delta " + cls(dRps);
+
+    var tiles = [
+      { k: "Web revenue", v: money(sel.rev, 0), d: (sel.rev / (BASE.rev / BASE.days * sel.days) - 1) * 100, b: "vs. baseline rate over " + sel.days + " days" },
+      { k: "Web conversion rate", v: pct(sel.cvr), d: (sel.cvr / BASE.cvr - 1) * 100, b: "June baseline " + pct(BASE.cvr) },
+      { k: "Web AOV", v: money(sel.aov), d: (sel.aov / BASE.aov - 1) * 100, b: "June baseline " + money(BASE.aov) },
+      { k: "Sessions", v: num(sel.ses), d: (sel.ses / sel.days / (BASE.ses / BASE.days) - 1) * 100, b: num(sel.ses / sel.days) + "/day vs. " + num(BASE.ses / BASE.days) + " baseline" },
+      { k: "Web orders", v: num(sel.ord), d: (sel.ord / sel.days / (BASE.ord / BASE.days) - 1) * 100, b: num(sel.ord / sel.days) + "/day vs. " + num(BASE.ord / BASE.days) + " baseline" }
+    ];
+    document.getElementById("tiles").innerHTML = tiles.map(function (t) {
+      return '<div class="tile"><div class="k">' + t.k + '</div><div class="v">' + t.v + '</div>' +
+             '<div class="d ' + cls(t.d) + '">' + signed(t.d) + '</div><div class="b">' + t.b + "</div></div>";
     }).join("");
-  }
-  function table(host, caption, head, rows) {
-    var h = "<table><caption>" + caption + "</caption><thead><tr>" +
-      head.map(function (c) { return "<th scope='col'>" + c + "</th>"; }).join("") + "</tr></thead><tbody>";
-    rows.forEach(function (r) {
-      h += "<tr>" + r.map(function (c, i) { return i === 0 ? "<th scope='row'>" + c + "</th>" : "<td>" + c + "</td>"; }).join("") + "</tr>";
-    });
-    host.innerHTML = h + "</tbody></table>";
-  }
 
-  // ---- render ------------------------------------------------------------
-  var PF = WEEKS.findIndex(function (d) { return d.partial; });
+    var labels = B.map(function (b) { return b.label; });
+    // only a TRAILING incomplete bucket gets the dashed/hollow treatment; a leading short
+    // week (Jun 1, holding only Jun 7) is a data-start artifact, not a projection.
+    var pf = (B.length && B[B.length - 1].partial) ? B.length - 1 : null;
+    var mk = [];
+    var ehIdx = B.findIndex(function (b) { return b.rows.some(function (r) { return r.d >= EH_DATE; }); });
+    if (ehIdx > 0) mk.push({ i: ehIdx, label: "Escape Hatch off", row: 0 });
+    var chIdx = B.findIndex(function (b) { return b.rows.some(function (r) { return r.d === CHANGE_DATE; }); });
+    if (chIdx > 0) mk.push({ i: chIdx, label: "Jun 7 change", row: 1 });
 
-  function renderAll() {
-    var s1 = css("--series-1"), s2 = css("--series-2"), s3 = css("--series-3");
-    var wl = WEEKS.map(function (d) { return d.w; });
-
-    // 1 — RPS
+    var rps = B.map(function (b) { return b.a.rps; });
+    var rpsTop = niceMax(Math.max.apply(null, rps.concat([BASE.rps]))) * 1.08;
     lineChart(document.getElementById("c1"), document.getElementById("t1"), {
-      labels: wl, min: 0, max: 2.25,
-      ticks: [0, 0.5, 1.0, 1.5, 2.0],
+      labels: labels, min: 0, max: rpsTop,
+      ticks: [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
       tickFmt: function (v) { return "$" + v.toFixed(2); },
-      ref: BASE.rps, refLabel: "June baseline $" + BASE.rps.toFixed(2),
-      partialFrom: PF, thSuffix: " week",
-      aria: "Web revenue per session by week, falling from $1.80 in June to $1.11 by the week of August 3.",
-      series: [{ name: "Revenue per session", color: s1, values: WEEKS.map(function (d) { return d.rps; }),
-                 fmt: function (v) { return "$" + v.toFixed(2); } }],
-      tipNote: function (i) { return "vs. June baseline " + signed((WEEKS[i].rps / BASE.rps - 1) * 100); }
+      ref: BASE.rps, refLabel: "June baseline " + money(BASE.rps), markers: mk, partialFrom: pf,
+      aria: "Revenue per session over the selected range.",
+      series: [{ name: "Revenue per session", color: s1, values: rps, fmt: function (v) { return money(v); } }],
+      tipTitle: function (i) { return (state.gran === "week" ? "Week of " : "") + labels[i]; },
+      tipNote: function (i) { return "vs. baseline " + signed((rps[i] / BASE.rps - 1) * 100) + (B[i].partial ? " · partial" : ""); }
     });
-    table(document.getElementById("tb1"), "Table view — web revenue per session by week (Online Store channel).",
-      ["Week of", "Web revenue", "Web orders", "Sessions", "RPS", "vs. baseline"],
-      WEEKS.map(function (d) {
-        return [d.w + (d.partial ? " (partial)" : ""), money(d.rev, 0), num(d.ord), num(d.ses),
-                "$" + d.rps.toFixed(3), signed((d.rps / BASE.rps - 1) * 100)];
+    table(document.getElementById("tb1"), "Revenue per session — " + tag + ".",
+      ["Period", "Web revenue", "Orders", "Sessions", "RPS", "CVR", "AOV", "vs. base"],
+      B.map(function (b) {
+        return [b.label + (b.partial ? " (partial)" : ""), money(b.a.rev, 0), num(b.a.ord), num(b.a.ses),
+                money(b.a.rps), pct(b.a.cvr), money(b.a.aov), signed((b.a.rps / BASE.rps - 1) * 100)];
       }));
 
-    // 2 — indexed decomposition
-    var idx = function (get, base) { return WEEKS.map(function (d) { return (get(d) / base) * 100; }); };
-    var iRps = idx(function (d) { return d.rps; }, BASE.rps);
-    var iCvr = idx(function (d) { return d.cvr; }, BASE.cvr);
-    var iAov = idx(function (d) { return d.aov; }, BASE.aov);
-    var items2 = [
-      { name: "Revenue per session", color: s1 },
-      { name: "Conversion rate", color: s2 },
-      { name: "Average order value", color: s3 }
-    ];
-    legend(document.getElementById("l2"), items2);
+    var iR = B.map(function (b) { return b.a.rps / BASE.rps * 100; });
+    var iC = B.map(function (b) { return b.a.cvr / BASE.cvr * 100; });
+    var iA = B.map(function (b) { return b.a.aov / BASE.aov * 100; });
+    legend(document.getElementById("l2"), [{ name: "Revenue per session", color: s1 }, { name: "Conversion rate", color: s2 }, { name: "Average order value", color: s3 }]);
+    var allI = iR.concat(iC, iA);
     lineChart(document.getElementById("c2"), document.getElementById("t2"), {
-      labels: wl, min: 40, max: 120, right: 108,
-      ticks: [40, 60, 80, 100, 120],
-      tickFmt: function (v) { return v; },
-      ref: 100, refLabel: "June baseline = 100",
-      partialFrom: PF, thSuffix: " week",
-      aria: "Indexed to the June baseline, conversion rate falls to 55 while average order value rises to 107, dragging revenue per session to 58.",
+      labels: labels,
+      min: Math.max(0, Math.floor(Math.min.apply(null, allI) / 20) * 20),
+      max: Math.ceil(Math.max.apply(null, allI) / 20) * 20, right: 108,
+      ticks: [0, 20, 40, 60, 80, 100, 120, 140, 160],
+      tickFmt: function (v) { return v; }, ref: 100, refLabel: "June baseline = 100",
+      markers: mk, partialFrom: pf, aria: "Conversion rate and average order value indexed to the June baseline.",
       series: [
-        { name: "Revenue per session", color: s1, values: iRps, fmt: function (v) { return v.toFixed(1); } },
-        { name: "Conversion rate", color: s2, values: iCvr, fmt: function (v) { return v.toFixed(1); } },
-        { name: "Average order value", color: s3, values: iAov, fmt: function (v) { return v.toFixed(1); } }
-      ]
+        { name: "Revenue per session", color: s1, values: iR, fmt: function (v) { return v.toFixed(1); } },
+        { name: "Conversion rate", color: s2, values: iC, fmt: function (v) { return v.toFixed(1); } },
+        { name: "Average order value", color: s3, values: iA, fmt: function (v) { return v.toFixed(1); } }
+      ],
+      tipTitle: function (i) { return (state.gran === "week" ? "Week of " : "") + labels[i]; }
     });
-    table(document.getElementById("tb2"), "Table view — conversion rate and average order value, actual and indexed to the June baseline (= 100).",
-      ["Week of", "CVR", "CVR idx", "AOV", "AOV idx", "RPS idx"],
-      WEEKS.map(function (d, i) {
-        return [d.w + (d.partial ? " (partial)" : ""), pct(d.cvr), iCvr[i].toFixed(1),
-                money(d.aov), iAov[i].toFixed(1), iRps[i].toFixed(1)];
-      }));
+    table(document.getElementById("tb2"), "Indexed decomposition — " + tag + " (June baseline = 100).",
+      ["Period", "CVR", "CVR idx", "AOV", "AOV idx", "RPS idx"],
+      B.map(function (b, i) { return [b.label + (b.partial ? " (partial)" : ""), pct(b.a.cvr), iC[i].toFixed(1), money(b.a.aov), iA[i].toFixed(1), iR[i].toFixed(1)]; }));
 
-    // 3 — weekly revenue bars
-    barChart(document.getElementById("c3"), document.getElementById("t3"), {
-      labels: wl, values: WEEKS.map(function (d) { return d.rev; }),
-      max: 140000, ticks: [0, 35000, 70000, 105000, 140000],
-      tickFmt: function (v) { return "$" + (v / 1000) + "k"; },
-      ref: BASE.rev, refLabel: "June baseline " + money(BASE.rev, 0) + "/wk",
-      partialFrom: PF,
-      aria: "Weekly Online Store revenue falling from about $119,000 per week in June to $63,955 in the week of August 3."
+    var before = agg(RAW.filter(function (r) { return r.d >= "2026-08-06" && r.d <= "2026-08-08"; }));
+    var after = agg(RAW.filter(function (r) { return r.d >= "2026-08-13" && r.d <= "2026-08-15"; }));
+    legend(document.getElementById("l3"), [{ name: "Thu–Sat before (Aug 6–8)", color: s1 }, { name: "Thu–Sat after (Aug 13–15)", color: s2 }]);
+    var rel = function (b, a) { return (a / b) * 100; };
+    groupedBars(document.getElementById("c3"), document.getElementById("t3"), {
+      groups: ["Sessions", "Orders", "Revenue", "RPS", "AOV"],
+      sublabels: [signed(rel(before.ses, after.ses) - 100), signed(rel(before.ord, after.ord) - 100),
+                  signed(rel(before.rev, after.rev) - 100), signed(rel(before.rps, after.rps) - 100),
+                  signed(rel(before.aov, after.aov) - 100)],
+      max: 110, ticks: [0, 25, 50, 75, 100], tickFmt: function (v) { return v; },
+      ref: 100, refLabel: "Before = 100",
+      aria: "Indexed comparison of the three days before and after the Escape Hatch removal. Revenue falls further than sessions.",
+      series: [
+        { name: "Before (Aug 6–8)", color: s1, values: [100, 100, 100, 100, 100], fmt: function (v) { return v.toFixed(0); } },
+        { name: "After (Aug 13–15)", color: s2, values: [rel(before.ses, after.ses), rel(before.ord, after.ord),
+            rel(before.rev, after.rev), rel(before.rps, after.rps), rel(before.aov, after.aov)],
+          fmt: function (v) { return v.toFixed(1); } }
+      ],
+      tipNote: function (gi) {
+        var raw = [[num(before.ses), num(after.ses)], [num(before.ord), num(after.ord)],
+                   [money(before.rev, 0), money(after.rev, 0)], [money(before.rps), money(after.rps)],
+                   [money(before.aov), money(after.aov)]];
+        return "Actual: " + raw[gi][0] + " → " + raw[gi][1];
+      }
     });
-    table(document.getElementById("tb3"), "Table view — Online Store (web) gross sales per week.",
-      ["Week of", "Web revenue", "vs. baseline"],
-      WEEKS.map(function (d) { return [d.w + (d.partial ? " (partial)" : ""), money(d.rev, 0), signed((d.rev / BASE.rev - 1) * 100)]; }));
+    table(document.getElementById("tb3"), "Escape Hatch removal — day-of-week-matched Thu–Sat windows (fixed; not affected by the range selector).",
+      ["Metric", "Before (Aug 6–8)", "After (Aug 13–15)", "Change"],
+      [["Sessions", num(before.ses), num(after.ses), signed((after.ses / before.ses - 1) * 100)],
+       ["Web orders", num(before.ord), num(after.ord), signed((after.ord / before.ord - 1) * 100)],
+       ["Web revenue", money(before.rev, 0), money(after.rev, 0), signed((after.rev / before.rev - 1) * 100)],
+       ["RPS", money(before.rps), money(after.rps), signed((after.rps / before.rps - 1) * 100)],
+       ["CVR", pct(before.cvr), pct(after.cvr), signed((after.cvr / before.cvr - 1) * 100)],
+       ["AOV", money(before.aov), money(after.aov), signed((after.aov / before.aov - 1) * 100)]]);
 
-    // 4 — sessions by referrer
-    var items4 = [
-      { name: "Direct / unattributed", color: s1 },
-      { name: "Instagram", color: s2 },
-      { name: "Facebook", color: s3 }
-    ];
-    legend(document.getElementById("l4"), items4);
+    var augRows = RAW.filter(function (r) { return r.d >= "2026-08-01"; });
+    var augPf = augRows.findIndex(function (r) { return r.partial; });
     lineChart(document.getElementById("c4"), document.getElementById("t4"), {
-      labels: DAILY.map(function (d) { return d.d; }), min: 0, max: 6000, everyOther: true, right: 86,
-      ticks: [0, 1500, 3000, 4500, 6000],
-      tickFmt: function (v) { return num(v); },
-      marker: { i: EH_INDEX, label: "Escape Hatch removed" },
-      aria: "Daily sessions by referrer. On August 13 the direct bucket steps down sharply while Instagram continues its gentle slope.",
-      series: [
-        { name: "Direct / unattributed", color: s1, values: DAILY.map(function (d) { return d.direct; }), fmt: num },
-        { name: "Instagram", color: s2, values: DAILY.map(function (d) { return d.ig; }), fmt: num },
-        { name: "Facebook", color: s3, values: DAILY.map(function (d) { return d.fb; }), fmt: num }
-      ]
+      labels: augRows.map(function (r) { return fmtD(r.d); }), min: 0, max: 1.8,
+      ticks: [0, 0.45, 0.9, 1.35, 1.8], tickFmt: function (v) { return "$" + v.toFixed(2); },
+      ref: 1.304, refLabel: "Aug 1–8 average $1.30",
+      markers: [{ i: augRows.findIndex(function (r) { return r.d === "2026-08-09"; }), label: "Google bot spike", row: 0 },
+                { i: augRows.findIndex(function (r) { return r.d === EH_DATE; }), label: "Escape Hatch off", row: 1 }],
+      partialFrom: augPf === -1 ? null : augPf,
+      aria: "Daily revenue per session through August, showing the Aug 9 bot-spike low and a partial recovery after Aug 13.",
+      series: [{ name: "Daily RPS", color: s1, values: augRows.map(function (r) { return r.rev / r.ses; }), fmt: function (v) { return money(v); } }],
+      tipNote: function (i) { return num(augRows[i].ses) + " sessions · " + money(augRows[i].rev, 0) + " revenue"; }
     });
-    table(document.getElementById("tb4"), "Table view — daily sessions by referrer, July 20 to August 15. The Escape Hatch was removed on August 13.",
-      ["Day", "Direct / unattributed", "Instagram", "Facebook"],
-      DAILY.map(function (d) { return [d.d, num(d.direct), num(d.ig), num(d.fb)]; }));
+    table(document.getElementById("tb4"), "Daily revenue per session, August (fixed window).",
+      ["Day", "Sessions", "Web revenue", "Orders", "RPS"],
+      augRows.map(function (r) { return [fmtD(r.d) + (r.partial ? " (partial)" : ""), num(r.ses), money(r.rev, 0), num(r.ord), money(r.rev / r.ses)]; }));
 
-    // 5 — conversion rate by traffic source
-    barChart(document.getElementById("c5"), document.getElementById("t5"), {
-      labels: SRC.map(function (s) { return s.short; }),
-      values: SRC.map(function (s) { return s.cvr; }),
-      max: 9, ticks: [0, 2, 4, 6, 8],
-      tickFmt: function (v) { return v + "%"; },
-      thPrefix: "", seriesName: "Conversion rate",
-      valueFmt: function (v) { return v.toFixed(2) + "%"; },
-      tipNote: function (i) { return { nm: "Sessions", vl: num(SRC[i].ses) }; },
-      aria: "Conversion rate by traffic source on mobile. Klaviyo email converts at 8.17% and Facebook paid at 1.48%."
+    var refRows = selected().filter(function (r) { return REF[r.d]; });
+    legend(document.getElementById("l5"), [{ name: "Direct / unattributed", color: s1 }, { name: "Instagram", color: s2 }, { name: "Facebook", color: s3 }]);
+    if (!refRows.length) {
+      document.getElementById("c5").innerHTML = '<p style="font-size:12.5px;color:var(--muted);padding:24px 0">No referrer data in the selected range — this breakdown starts Jul 20.</p>';
+      document.getElementById("tb5").innerHTML = "";
+    } else {
+      var ehI = refRows.findIndex(function (r) { return r.d === EH_DATE; });
+      lineChart(document.getElementById("c5"), document.getElementById("t5"), {
+        labels: refRows.map(function (r) { return fmtD(r.d); }), min: 0, max: 6000,
+        ticks: [0, 1500, 3000, 4500, 6000], right: 88, tickFmt: num,
+        markers: ehI > 0 ? [{ i: ehI, label: "Escape Hatch off" }] : [],
+        aria: "Daily sessions by referrer. The August 13 drop lands in the direct bucket.",
+        series: [
+          { name: "Direct / unattributed", color: s1, values: refRows.map(function (r) { return REF[r.d][0]; }), fmt: num },
+          { name: "Instagram", color: s2, values: refRows.map(function (r) { return REF[r.d][1]; }), fmt: num },
+          { name: "Facebook", color: s3, values: refRows.map(function (r) { return REF[r.d][2]; }), fmt: num }
+        ]
+      });
+      table(document.getElementById("tb5"), "Daily sessions by referrer — " + tag + ".",
+        ["Day", "Direct / unattributed", "Instagram", "Facebook"],
+        refRows.map(function (r) { return [fmtD(r.d), num(REF[r.d][0]), num(REF[r.d][1]), num(REF[r.d][2])]; }));
+    }
+
+    var cohColors = [s1, s2, s3, s4];
+    legend(document.getElementById("l6"), COHORTS.map(function (c, i) { return { name: c.m + " (" + c.tag + ")", color: cohColors[i] }; }));
+    var MONTHS = [-1, 0, 1, 2, 3, 4];
+    var series6 = COHORTS.map(function (c, i) {
+      var cum = 0, vals = [];
+      MONTHS.forEach(function (m) {
+        if (c.v[String(m)] != null) { cum += c.v[String(m)]; vals.push(cum / c.customers); }
+        else vals.push(null);
+      });
+      return { name: c.m, color: cohColors[i], values: vals, lastComplete: c.lastComplete };
     });
-    table(document.getElementById("tb5"), "Table view — mobile sessions, add-to-cart rate and conversion rate by traffic source, last 30 days.",
-      ["Source", "Sessions", "Add-to-cart", "Conversion rate"],
-      SRC.map(function (s) { return [s.name, num(s.ses), s.atc.toFixed(2) + "%", s.cvr.toFixed(2) + "%"]; }));
-
-    // 6 — add-to-cart rate by traffic source
-    barChart(document.getElementById("c6"), document.getElementById("t6"), {
-      labels: SRC.map(function (s) { return s.short; }),
-      values: SRC.map(function (s) { return s.atc; }),
-      max: 21, ticks: [0, 5, 10, 15, 20],
-      tickFmt: function (v) { return v + "%"; },
-      thPrefix: "", seriesName: "Add-to-cart rate",
-      valueFmt: function (v) { return v.toFixed(2) + "%"; },
-      tipNote: function (i) { return { nm: "Sessions", vl: num(SRC[i].ses) }; },
-      aria: "Add-to-cart rate by traffic source on mobile. Klaviyo email reaches 19.7% while Facebook paid reaches 5.09%."
-    });
-    table(document.getElementById("tb6"), "Table view — the Facebook paid mobile funnel in absolute numbers, last 30 days.",
-      ["Step", "Sessions", "Share of sessions"],
-      [["Landed from a Facebook paid ad", num(154371), "100%"],
-       ["Added something to a cart", num(7852), "5.09%"],
-       ["Placed an order", num(2292), "1.48%"],
-       ["Never added to a cart", num(154371 - 7852), "94.91%"]]);
-
-    // 7 — which screen the buy button first appears on
-    barChart(document.getElementById("c7"), document.getElementById("t7"), {
-      labels: PAGES.map(function (p) { return p.short; }),
-      values: PAGES.map(function (p) { return p.buybox; }),
-      max: 3.4, ticks: [0, 1, 2, 3],
-      tickFmt: function (v) { return v; },
-      thPrefix: "", seriesName: "Buy button appears on",
-      valueFmt: function (v) { return "screen " + v; },
-      tipNote: function (i) { return { nm: "Sticky buy bar", vl: PAGES[i].sticky }; },
-      aria: "Which phone screen the buy button first appears on. Cheers on screen 1, Super Liver and More Labs on screen 2, Grüns and The Absorption Company on screen 3."
-    });
-    table(document.getElementById("tb7"), "Table view — the screen each product page's buy button first appears on, at 390×844.",
-      ["Product page", "Buy button on screen", "Page height (screens)"],
-      PAGES.map(function (p) { return [p.name, "screen " + p.buybox, p.tall.toFixed(1)]; }));
-
-    // 8 — full page measurement table (always visible)
-    table(document.getElementById("tb8"), "Measured in a real browser at 390×844 on 2026-08-16 and verified against the published screenshots.",
-      ["Product page", "Pop-up appears", "Screen covered", "Buy button on screen", "Sticky buy bar"],
-      PAGES.map(function (p) {
-        return [p.name, p.popup, p.cover, "screen " + p.buybox, p.sticky];
+    cohortChart(document.getElementById("c6"), document.getElementById("t6"), series6, MONTHS);
+    table(document.getElementById("tb6"), "Cumulative revenue per acquired customer, by cohort. Month −1 is the acquiring order; * marks an incomplete window.",
+      ["Cohort", "Customers", "Acq. order", "Thru m0", "Thru m1", "Thru m2", "Thru m3", "Thru m4"],
+      COHORTS.map(function (c, ci) {
+        var row = [c.m + " · " + c.tag, num(c.customers)];
+        series6[ci].values.forEach(function (v, mi) {
+          if (v == null) { row.push("—"); return; }
+          row.push(money(v) + (MONTHS[mi] > c.lastComplete ? " *" : ""));
+        });
+        return row;
       }));
   }
 
-  renderAll();
+  function cohortChart(host, tipEl, series, MONTHS) {
+    var W = 1000, H = 330, M = { t: 18, r: 96, b: 46, l: 60 };
+    var pw = W - M.l - M.r, ph = H - M.t - M.b, n = MONTHS.length;
+    var maxV = 0;
+    series.forEach(function (s) { s.values.forEach(function (v) { if (v != null && v > maxV) maxV = v; }); });
+    var hi = Math.ceil(maxV / 10) * 10 + 5;
+    var x = function (i) { return M.l + (pw * i) / (n - 1); };
+    var y = function (v) { return M.t + ph - (v / hi) * ph; };
+    host.innerHTML = "";
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Cumulative revenue per acquired customer by cohort." });
+    [0, 20, 40, 60, 80].filter(function (t) { return t <= hi; }).forEach(function (tv) {
+      svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(tv), y2: y(tv), class: "grid-line" }));
+      svg.appendChild(el("text", { x: M.l - 10, y: y(tv) + 4, "text-anchor": "end", class: "tick" }, "$" + tv));
+    });
+    svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: M.t + ph, y2: M.t + ph, class: "axis-line" }));
+    MONTHS.forEach(function (m, i) {
+      svg.appendChild(el("text", { x: x(i), y: M.t + ph + 20, "text-anchor": "middle", class: "tick" }, m === -1 ? "Acq." : "m" + m));
+    });
+    svg.appendChild(el("text", { x: M.l + pw / 2, y: M.t + ph + 40, "text-anchor": "middle", class: "anno" }, "Months since first purchase"));
 
-  // ---- controls ----------------------------------------------------------
+    var ends = [];
+    series.forEach(function (s) {
+      var pts = [];
+      s.values.forEach(function (v, i) { if (v != null) pts.push({ i: i, v: v, m: MONTHS[i] }); });
+      var solid = pts.filter(function (p) { return p.m <= s.lastComplete; });
+      var dashed = pts.filter(function (p) { return p.m >= s.lastComplete; });
+      if (solid.length > 1) svg.appendChild(el("path", { d: solid.map(function (p, k) { return (k ? "L" : "M") + x(p.i) + " " + y(p.v); }).join(" "),
+        fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      if (dashed.length > 1) svg.appendChild(el("path", { d: dashed.map(function (p, k) { return (k ? "L" : "M") + x(p.i) + " " + y(p.v); }).join(" "),
+        fill: "none", stroke: s.color, "stroke-width": 2, "stroke-dasharray": "4 4", "stroke-linecap": "round" }));
+      pts.forEach(function (p) {
+        var inc = p.m > s.lastComplete;
+        svg.appendChild(el("circle", { cx: x(p.i), cy: y(p.v), r: 4.5,
+          fill: inc ? css("--surface-1") : s.color, stroke: inc ? s.color : css("--surface-1"), "stroke-width": 2 }));
+      });
+      var last = pts[pts.length - 1];
+      ends.push({ x: x(last.i) + 10, y: y(last.v) + 4, text: money(last.v) });
+    });
+    ends.sort(function (a, b) { return a.y - b.y; });
+    for (var q = 1; q < ends.length; q++) if (ends[q].y - ends[q - 1].y < 15) ends[q].y = ends[q - 1].y + 15;
+    ends.forEach(function (L) { svg.appendChild(el("text", { x: L.x, y: L.y, class: "dlabel", fill: css("--text-primary") }, L.text)); });
+
+    var hit = el("rect", { x: M.l, y: M.t, width: pw, height: ph, fill: "transparent" });
+    svg.appendChild(hit); host.appendChild(svg);
+    hit.addEventListener("mousemove", function (ev) {
+      var rc = svg.getBoundingClientRect(), px = ((ev.clientX - rc.left) / rc.width) * W;
+      var i = Math.max(0, Math.min(n - 1, Math.round(((px - M.l) / pw) * (n - 1))));
+      var html = '<div class="th">' + (MONTHS[i] === -1 ? "Acquiring order" : "Through month " + MONTHS[i]) + "</div>";
+      series.forEach(function (s) {
+        if (s.values[i] == null) return;
+        var inc = MONTHS[i] > s.lastComplete;
+        html += '<div class="row"><span class="sw" style="background:' + s.color + '"></span><span class="nm">' + s.name + (inc ? " *" : "") + '</span><span class="vl">' + money(s.values[i]) + "</span></div>";
+      });
+      html += '<div class="pt">* incomplete — window still elapsing</div>';
+      tipEl.innerHTML = html; tipEl.style.opacity = 1;
+      var box = host.getBoundingClientRect(), relX = (x(i) / W) * box.width, tw = tipEl.offsetWidth;
+      tipEl.style.left = Math.max(0, Math.min(box.width - tw, relX - tw / 2)) + "px";
+      tipEl.style.top = "6px";
+    });
+    hit.addEventListener("mouseleave", function () { tipEl.style.opacity = 0; });
+  }
+
+  function shiftDays(iso, n) {
+    var t = Date.UTC(+iso.slice(0,4), +iso.slice(5,7) - 1, +iso.slice(8,10)) + n * 86400000;
+    return new Date(t).toISOString().slice(0, 10);
+  }
+  var PRESETS = {
+    all:  function () { return [MIN, MAX]; },
+    base: function () { return [BASE_FROM, BASE_TO]; },
+    d30:  function () { return [shiftDays(MAX, -29), MAX]; },
+    d14:  function () { return [shiftDays(MAX, -13), MAX]; },
+    post: function () { return [EH_DATE, MAX]; }
+  };
+  function setPreset(name) {
+    var r = PRESETS[name]();
+    state.from = r[0]; state.to = r[1]; state.preset = name;
+    document.getElementById("from").value = state.from;
+    document.getElementById("to").value = state.to;
+    syncButtons(); render();
+  }
+  function syncButtons() {
+    document.querySelectorAll("[data-preset]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.preset === state.preset)); });
+    document.querySelectorAll("[data-gran]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.gran === state.gran)); });
+  }
+  document.querySelectorAll("[data-preset]").forEach(function (b) {
+    b.addEventListener("click", function () { setPreset(b.dataset.preset); });
+  });
+  document.querySelectorAll("[data-gran]").forEach(function (b) {
+    b.addEventListener("click", function () { state.gran = b.dataset.gran; syncButtons(); render(); });
+  });
+  document.getElementById("applyBtn").addEventListener("click", function () {
+    var f = document.getElementById("from").value, t = document.getElementById("to").value;
+    if (!f || !t) return;
+    if (f > t) { var tmp = f; f = t; t = tmp; }
+    state.from = f < MIN ? MIN : f; state.to = t > MAX ? MAX : t; state.preset = "custom";
+    document.getElementById("from").value = state.from; document.getElementById("to").value = state.to;
+    syncButtons(); render();
+  });
   var themeBtn = document.getElementById("themeBtn");
   themeBtn.addEventListener("click", function () {
     var dark = document.documentElement.getAttribute("data-theme") === "dark";
     document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
     themeBtn.setAttribute("aria-pressed", String(!dark));
     themeBtn.textContent = dark ? "Dark mode" : "Light mode";
-    renderAll();
+    render();
   });
-
   var tableBtn = document.getElementById("tableBtn");
   tableBtn.addEventListener("click", function () {
     var on = tableBtn.getAttribute("aria-pressed") === "true";
     tableBtn.setAttribute("aria-pressed", String(!on));
     tableBtn.textContent = on ? "Show data tables" : "Hide data tables";
-    ["tb1", "tb2", "tb3", "tb4", "tb5", "tb6", "tb7"].forEach(function (id) { document.getElementById(id).hidden = on; });
+    ["tb1","tb2","tb3","tb4","tb5","tb6"].forEach(function (id) { document.getElementById(id).hidden = on; });
   });
+  window.addEventListener("resize", render);
 
-  window.addEventListener("resize", renderAll);
+  setPreset("all");
+  document.querySelector('[data-gran="week"]').click();
 })();
 </script>
 </body>
