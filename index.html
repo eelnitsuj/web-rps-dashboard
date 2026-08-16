@@ -271,6 +271,77 @@
     </div>
   </div>
 
+  <header class="page" style="margin-top:34px">
+    <h1>Part 2 — why conversion collapsed: 94.9% of paid visitors never add to cart</h1>
+    <p class="sub">Mobile only · last 30 days to 2026-08-16 · Sources: Shopify ShopifyQL (<code>sessions</code>) for the traffic cuts; live browser measurement at 390×844 for the page cuts</p>
+  </header>
+
+  <div class="card">
+    <div class="hero">
+      <div>
+        <div class="fig">5.09%</div>
+        <div class="figlab">Add-to-cart rate — Facebook paid, mobile (154,371 sessions)</div>
+      </div>
+      <div>
+        <div class="delta">−74%</div>
+        <div class="vs">vs. 19.7% on Klaviyo email traffic</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>The same site is five different businesses, depending on who walks in</h2>
+    <p class="note">Conversion rate by traffic source, mobile only. Sitewide conversion averages these together and hides the thing that matters: the site performs for people who already know us and falls apart in front of strangers. Strangers are 69% of the traffic.</p>
+    <div class="chartbox"><div id="c5"></div><div class="tip" id="t5"></div></div>
+    <div class="tblwrap" hidden id="tb5"></div>
+    <p class="note" style="margin-top:10px">Caveat on the direct bucket: this window runs to Aug&nbsp;16, so roughly 27 of its 30 days still contain the phantom sessions removed with the Escape Hatch on Aug&nbsp;13. Direct is overstated here — which if anything widens the paid/owned gap rather than narrowing it.</p>
+  </div>
+
+  <div class="card">
+    <h2>The blockage is add-to-cart, not checkout</h2>
+    <p class="note">Add-to-cart rate by source — the leading indicator, and the thing the page changes below are meant to move. Sitewide, of the people who do add to cart, <strong>81% go on to reach checkout</strong>. The page is not failing to persuade people who engage; it is failing to get anyone to engage. Turn on the data table for the paid funnel in absolute numbers.</p>
+    <div class="chartbox"><div id="c6"></div><div class="tip" id="t6"></div></div>
+    <div class="tblwrap" hidden id="tb6"></div>
+  </div>
+
+  <div class="card">
+    <h2>How far a phone visitor has to travel to reach the buy button</h2>
+    <p class="note">Measured by loading each product page in a real browser at iPhone size (390×844) and reading the position of the first add-to-cart control, in screen-heights from the top of the page. Our own page was measured with the pop-up script blocked, so the number reflects the page itself.</p>
+    <div class="chartbox"><div id="c7"></div><div class="tip" id="t7"></div></div>
+    <div class="tblwrap" hidden id="tb7"></div>
+  </div>
+
+  <div class="card">
+    <h2>What we measured on each product page</h2>
+    <div class="tblwrap" id="tb8"></div>
+  </div>
+
+  <div class="card">
+    <h2>Three findings, and what they cost</h2>
+    <div class="findings">
+      <div class="finding confirmed">
+        <div class="vt">Confirmed</div>
+        <div class="cl">A full-screen pop-up covers the product page at 0.0 seconds, before anything is readable.</div>
+        <p>Measured by polling every 250ms from page load: the overlay is visible at <strong>0.0s</strong>, covers <strong>100%</strong> of the phone screen, and locks scrolling. It asks <em>“What are we helping you fix today?”</em> and offers four categories — a question a visitor arriving from a Super Liver ad answered by clicking the ad.</p>
+        <p>Grüns and Cheers run the same pop-up tool and both let the visitor see the page first (2.25s and 1.5s). More Labs shows none at all. We are the only site in the set that interrupts on arrival.</p>
+        <p><strong>On the reported A/B test:</strong> six cold sessions, six fresh browser profiles, all six got the immediate 100% overlay. That does not prove the test is not running — allocation may exclude automated traffic — but no variant was reachable from outside. Worth confirming in the Alia dashboard.</p>
+      </div>
+      <div class="finding confirmed">
+        <div class="vt">Confirmed — smaller gap than first reported</div>
+        <div class="cl">Our buy box sits 1.7 screens down; the comparison set sits at 0.8–0.95.</div>
+        <p>An earlier draft of this analysis put Grüns and The Absorption Company at “top of page.” That was wrong — it read a hidden sticky element as the buy box. Re-measured after properly dismissing overlays, they sit at <strong>0.80</strong> and <strong>0.95</strong> screens, and Cheers at <strong>0.91</strong>.</p>
+        <p>So the gap is roughly <strong>double</strong>, not infinite. Still last in the set, and still meaningful on a phone — but the corrected number is the one to quote.</p>
+      </div>
+      <div class="finding confirmed">
+        <div class="vt">Confirmed</div>
+        <div class="cl">There is a sticky header with a cart icon, but no sticky add-to-cart bar.</div>
+        <p>On a page <strong>17.2 screens tall</strong>, we checked at 35%, 50% and 90% depth with the pop-up script blocked so the page was fully visible. The only pinned full-width element is the navigation header. Its cart icon opens the cart drawer — <strong>it cannot add Super Liver to the cart.</strong> Cheers, Grüns and The Absorption Company all keep a working add-to-cart bar on screen at every depth.</p>
+        <p>The consequence: the strongest material on the page — per-ingredient research, the comparison table, the results timeline — sits where a reader who has just been convinced cannot act on it.</p>
+        <p><strong>The component already exists.</strong> <code>productStickyATC</code> is present in nine product sections of the theme. <code>main-product.liquid</code> — the section Super Liver actually renders — is the only one without it.</p>
+      </div>
+    </div>
+  </div>
+
   <footer class="page">
     <p>Notes · The week of Aug&nbsp;10 is partial (through Aug&nbsp;16, ~6.6 days) and is drawn hollow throughout; it is excluded from every headline comparison. · Aug&nbsp;9 carries a Google-referrer spike of 6,658 sessions against a ~500/day norm, almost certainly non-human; it depresses that day's conversion to 0.82% and is left in the data unadjusted. · Conversion here is Online Store orders ÷ sessions, which tracks Shopify's <code>conversion_rate</code> closely (1.76% vs. 1.73% for the week of Aug&nbsp;3) and keeps the CVR × AOV decomposition exact.</p>
   </footer>
@@ -325,6 +396,33 @@
   ].map(function (r) { return { d: r[0], direct: r[1], ig: r[2], fb: r[3] }; });
 
   var EH_INDEX = DAILY.findIndex(function (r) { return r.d === "Aug 13"; });
+
+  // Mobile sessions by traffic source, last 30 days to 2026-08-16.
+  // Shopify ShopifyQL: FROM sessions ... GROUP BY utm_source, utm_medium
+  // WHERE session_device_type = 'mobile'. Ordered by conversion rate.
+  var SRC = [
+    { name: "Klaviyo — email",      short: "Email",    ses: 2827,   atc: 19.70, cvr: 8.17 },
+    { name: "Postscript — SMS",     short: "SMS",      ses: 4648,   atc: 16.12, cvr: 6.28 },
+    { name: "Instagram — organic",  short: "IG organic", ses: 2446, atc: 13.90, cvr: 5.31 },
+    { name: "Untagged / direct",    short: "Direct",   ses: 50426,  atc: 5.42,  cvr: 2.34 },
+    { name: "Facebook — paid",      short: "FB paid",  ses: 154371, atc: 5.09,  cvr: 1.48 },
+    { name: "Axon — paid",          short: "Axon",     ses: 6824,   atc: 1.71,  cvr: 0.63 },
+    { name: "Snapchat — paid",      short: "Snapchat", ses: 547,    atc: 0.55,  cvr: 0.18 }
+  ];
+
+  // Live browser measurement at 390x844, 2026-08-16. Our own page was measured
+  // twice: once as a visitor sees it, and once with the pop-up script blocked so
+  // the buy box and sticky-bar readings reflect the page rather than the overlay.
+  var PAGES = [
+    { name: "Grüns", short: "Grüns", buybox: 0.80, tall: 18.1,
+      popup: "2.25s", cover: "100%", mid: "yes", deep: "yes" },
+    { name: "Cheers Restore", short: "Cheers", buybox: 0.91, tall: 17.9,
+      popup: "1.5s", cover: "100%", mid: "yes", deep: "yes" },
+    { name: "The Absorption Company", short: "Absorption", buybox: 0.95, tall: 15.3,
+      popup: "0.0s", cover: "43% (cookie notice)", mid: "yes", deep: "yes" },
+    { name: "Super Liver (ours)", short: "Super Liver", buybox: 1.70, tall: 17.2,
+      popup: "0.0s", cover: "100%", mid: "no", deep: "no" }
+  ];
 
   // ---- helpers ----------------------------------------------------------
   var NS = "http://www.w3.org/2000/svg";
@@ -522,11 +620,18 @@
       var rct = svg.getBoundingClientRect();
       var px = ((ev.clientX - rct.left) / rct.width) * W;
       var i = Math.max(0, Math.min(n - 1, Math.floor((px - M.l) / slot)));
-      var html = '<div class="th">Week of ' + labels[i] + "</div>" +
+      var vfmt = opts.valueFmt || function (v) { return money(v, 0); };
+      var html = '<div class="th">' + (opts.thPrefix != null ? opts.thPrefix : "Week of ") + labels[i] + "</div>" +
         '<div class="row"><span class="sw" style="background:' + color + '"></span>' +
-        '<span class="nm">Web revenue</span><span class="vl">' + money(vals[i], 0) + "</span></div>" +
-        '<div class="row"><span class="sw" style="background:transparent"></span>' +
-        '<span class="nm">vs. June baseline</span><span class="vl">' + signed((vals[i] / opts.ref - 1) * 100) + "</span></div>";
+        '<span class="nm">' + (opts.seriesName || "Web revenue") + '</span><span class="vl">' + vfmt(vals[i]) + "</span></div>";
+      if (opts.ref != null) {
+        html += '<div class="row"><span class="sw" style="background:transparent"></span>' +
+          '<span class="nm">vs. June baseline</span><span class="vl">' + signed((vals[i] / opts.ref - 1) * 100) + "</span></div>";
+      }
+      if (opts.tipNote) {
+        html += '<div class="row"><span class="sw" style="background:transparent"></span>' +
+          '<span class="nm">' + opts.tipNote(i).nm + '</span><span class="vl">' + opts.tipNote(i).vl + "</span></div>";
+      }
       if (opts.partialFrom != null && i >= opts.partialFrom) html += '<div class="pt">Partial week — through Aug 16</div>';
       tipEl.innerHTML = html;
       tipEl.style.opacity = 1;
@@ -653,6 +758,61 @@
     table(document.getElementById("tb4"), "Table view — daily sessions by referrer, July 20 to August 15. The Escape Hatch was removed on August 13.",
       ["Day", "Direct / unattributed", "Instagram", "Facebook"],
       DAILY.map(function (d) { return [d.d, num(d.direct), num(d.ig), num(d.fb)]; }));
+
+    // 5 — conversion rate by traffic source
+    barChart(document.getElementById("c5"), document.getElementById("t5"), {
+      labels: SRC.map(function (s) { return s.short; }),
+      values: SRC.map(function (s) { return s.cvr; }),
+      max: 9, ticks: [0, 2, 4, 6, 8],
+      tickFmt: function (v) { return v + "%"; },
+      thPrefix: "", seriesName: "Conversion rate",
+      valueFmt: function (v) { return v.toFixed(2) + "%"; },
+      tipNote: function (i) { return { nm: "Sessions", vl: num(SRC[i].ses) }; },
+      aria: "Conversion rate by traffic source on mobile. Klaviyo email converts at 8.17% and Facebook paid at 1.48%."
+    });
+    table(document.getElementById("tb5"), "Table view — mobile sessions, add-to-cart rate and conversion rate by traffic source, last 30 days.",
+      ["Source", "Sessions", "Add-to-cart", "Conversion rate"],
+      SRC.map(function (s) { return [s.name, num(s.ses), s.atc.toFixed(2) + "%", s.cvr.toFixed(2) + "%"]; }));
+
+    // 6 — add-to-cart rate by traffic source
+    barChart(document.getElementById("c6"), document.getElementById("t6"), {
+      labels: SRC.map(function (s) { return s.short; }),
+      values: SRC.map(function (s) { return s.atc; }),
+      max: 21, ticks: [0, 5, 10, 15, 20],
+      tickFmt: function (v) { return v + "%"; },
+      thPrefix: "", seriesName: "Add-to-cart rate",
+      valueFmt: function (v) { return v.toFixed(2) + "%"; },
+      tipNote: function (i) { return { nm: "Sessions", vl: num(SRC[i].ses) }; },
+      aria: "Add-to-cart rate by traffic source on mobile. Klaviyo email reaches 19.7% while Facebook paid reaches 5.09%."
+    });
+    table(document.getElementById("tb6"), "Table view — the Facebook paid mobile funnel in absolute numbers, last 30 days.",
+      ["Step", "Sessions", "Share of sessions"],
+      [["Landed from a Facebook paid ad", num(154371), "100%"],
+       ["Added something to a cart", num(7852), "5.09%"],
+       ["Placed an order", num(2292), "1.48%"],
+       ["Never added to a cart", num(154371 - 7852), "94.91%"]]);
+
+    // 7 — distance to the buy box
+    barChart(document.getElementById("c7"), document.getElementById("t7"), {
+      labels: PAGES.map(function (p) { return p.short; }),
+      values: PAGES.map(function (p) { return p.buybox; }),
+      max: 2, ticks: [0, 0.5, 1.0, 1.5, 2.0],
+      tickFmt: function (v) { return v.toFixed(1); },
+      thPrefix: "", seriesName: "Screens to buy box",
+      valueFmt: function (v) { return v.toFixed(2) + " screens"; },
+      tipNote: function (i) { return { nm: "Page height", vl: PAGES[i].tall.toFixed(1) + " screens" }; },
+      aria: "Distance from the top of the product page to the first add-to-cart control, in phone screen-heights. Super Liver is furthest at 1.7 screens; the others sit between 0.80 and 0.95."
+    });
+    table(document.getElementById("tb7"), "Table view — distance to the first add-to-cart control, in phone screen-heights (390×844).",
+      ["Product page", "Screens to buy box", "Page height (screens)"],
+      PAGES.map(function (p) { return [p.name, p.buybox.toFixed(2), p.tall.toFixed(1)]; }));
+
+    // 8 — full page measurement table (always visible)
+    table(document.getElementById("tb8"), "Measured in a real browser at 390×844 on 2026-08-16. “Buy bar on screen” means an add-to-cart control was visible after scrolling to that depth.",
+      ["Product page", "Pop-up appears", "Screen covered", "Screens to buy box", "Buy bar at 50%", "Buy bar at 90%"],
+      PAGES.map(function (p) {
+        return [p.name, p.popup, p.cover, p.buybox.toFixed(2), p.mid, p.deep];
+      }));
   }
 
   renderAll();
@@ -672,7 +832,7 @@
     var on = tableBtn.getAttribute("aria-pressed") === "true";
     tableBtn.setAttribute("aria-pressed", String(!on));
     tableBtn.textContent = on ? "Show data tables" : "Hide data tables";
-    ["tb1", "tb2", "tb3", "tb4"].forEach(function (id) { document.getElementById(id).hidden = on; });
+    ["tb1", "tb2", "tb3", "tb4", "tb5", "tb6", "tb7"].forEach(function (id) { document.getElementById(id).hidden = on; });
   });
 
   window.addEventListener("resize", renderAll);
