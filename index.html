@@ -306,7 +306,7 @@
 
   <div class="card">
     <h2>How far a phone visitor has to travel to reach the buy button</h2>
-    <p class="note">Measured by loading each product page in a real browser at iPhone size (390×844) and reading the position of the first add-to-cart control, in screen-heights from the top of the page. Our own page was measured with the pop-up script blocked, so the number reflects the page itself.</p>
+    <p class="note">Each product page was loaded at iPhone size (390×844) and photographed one screen at a time. This chart reads the screen the buy button is actually visible on — checked against the pictures, not inferred from the page code. <a href="evidence.html">Every screen is published here</a>, so the chart can be verified rather than trusted.</p>
     <div class="chartbox"><div id="c7"></div><div class="tip" id="t7"></div></div>
     <div class="tblwrap" hidden id="tb7"></div>
   </div>
@@ -326,17 +326,18 @@
         <p>Grüns and Cheers run the same pop-up tool and both let the visitor see the page first (2.25s and 1.5s). More Labs shows none at all. We are the only site in the set that interrupts on arrival.</p>
         <p><strong>On the reported A/B test:</strong> six cold sessions, six fresh browser profiles, all six got the immediate 100% overlay. That does not prove the test is not running — allocation may exclude automated traffic — but no variant was reachable from outside. Worth confirming in the Alia dashboard.</p>
       </div>
-      <div class="finding confirmed">
-        <div class="vt">Confirmed — smaller gap than first reported</div>
-        <div class="cl">Our buy box sits 1.7 screens down; the comparison set sits at 0.8–0.95.</div>
-        <p>An earlier draft of this analysis put Grüns and The Absorption Company at “top of page.” That was wrong — it read a hidden sticky element as the buy box. Re-measured after properly dismissing overlays, they sit at <strong>0.80</strong> and <strong>0.95</strong> screens, and Cheers at <strong>0.91</strong>.</p>
-        <p>So the gap is roughly <strong>double</strong>, not infinite. Still last in the set, and still meaningful on a phone — but the corrected number is the one to quote.</p>
+      <div class="finding refuted">
+        <div class="vt">Withdrawn — this claim was wrong</div>
+        <div class="cl">Our buy box is <em>not</em> unusually far down. It is second-shortest in the set.</div>
+        <p>Two earlier versions of this analysis said our buy box was the furthest down of any brand measured — first “1.7 screens against a set that starts at the top,” then “1.7 against 0.80–0.95.” <strong>Both were wrong.</strong> An automated reader was picking up a hidden element and calling it the buy button. The screenshots contradict it flatly.</p>
+        <p>Photographed screen by screen, the buy button first appears on: <strong>Cheers screen 1 · Super Liver screen 2 · More Labs screen 2 · Grüns screen 3 · The Absorption Company screen 3.</strong> Grüns puts a flavour picker, a sugar-level picker and a quantity picker ahead of its plan tiles; Absorption puts four clinical stat tiles and a challenge banner ahead of theirs.</p>
+        <p>So we are ahead of both brands this report earlier held up as the standard. <strong>Moving the buy box up is not the opportunity here</strong>, and the ticket raised against it should be closed.</p>
       </div>
       <div class="finding confirmed">
-        <div class="vt">Confirmed</div>
-        <div class="cl">There is a sticky header with a cart icon, but no sticky add-to-cart bar.</div>
-        <p>On a page <strong>17.2 screens tall</strong>, we checked at 35%, 50% and 90% depth with the pop-up script blocked so the page was fully visible. The only pinned full-width element is the navigation header. Its cart icon opens the cart drawer — <strong>it cannot add Super Liver to the cart.</strong> Cheers, Grüns and The Absorption Company all keep a working add-to-cart bar on screen at every depth.</p>
-        <p>The consequence: the strongest material on the page — per-ingredient research, the comparison table, the results timeline — sits where a reader who has just been convinced cannot act on it.</p>
+        <div class="vt">Confirmed — and this is the real gap</div>
+        <div class="cl">Cheers carries a working add-to-cart bar from screen one. We carry a cart icon that cannot add anything.</div>
+        <p>Look at the Cheers screen 1 capture: pinned across the bottom of the very first screen, before any scrolling, is <strong>“Restore — Add to cart for $35.”</strong> The buy decision is available from the first moment and never leaves. The Absorption Company runs the same pattern, appearing deeper in the page.</p>
+        <p>On our page — checked with the pop-up script blocked so the page was fully visible — the only pinned element at any depth is the navigation header. Its cart icon opens the cart drawer; <strong>it cannot add Super Liver to the cart.</strong> On a page <strong>17.2 screens tall</strong>, the research, the comparison table and the results timeline all sit where a reader who has just been convinced cannot act on it.</p>
         <p><strong>The component already exists.</strong> <code>productStickyATC</code> is present in nine product sections of the theme. <code>main-product.liquid</code> — the section Super Liver actually renders — is the only one without it.</p>
       </div>
     </div>
@@ -410,18 +411,22 @@
     { name: "Snapchat — paid",      short: "Snapchat", ses: 547,    atc: 0.55,  cvr: 0.18 }
   ];
 
-  // Live browser measurement at 390x844, 2026-08-16. Our own page was measured
-  // twice: once as a visitor sees it, and once with the pop-up script blocked so
-  // the buy box and sticky-bar readings reflect the page rather than the overlay.
+  // Live browser measurement at 390x844, 2026-08-16, VERIFIED BY EYE.
+  // Two earlier automated passes reported buy-box positions that the screenshots
+  // contradicted — a hidden element was being read as the buy button. These values
+  // are the screen on which the real buy button is actually visible in the capture,
+  // and every screen is published in evidence.html so the numbers can be checked.
   var PAGES = [
-    { name: "Grüns", short: "Grüns", buybox: 0.80, tall: 18.1,
-      popup: "2.25s", cover: "100%", mid: "yes", deep: "yes" },
-    { name: "Cheers Restore", short: "Cheers", buybox: 0.91, tall: 17.9,
-      popup: "1.5s", cover: "100%", mid: "yes", deep: "yes" },
-    { name: "The Absorption Company", short: "Absorption", buybox: 0.95, tall: 15.3,
-      popup: "0.0s", cover: "43% (cookie notice)", mid: "yes", deep: "yes" },
-    { name: "Super Liver (ours)", short: "Super Liver", buybox: 1.70, tall: 17.2,
-      popup: "0.0s", cover: "100%", mid: "no", deep: "no" }
+    { name: "Cheers Restore", short: "Cheers", buybox: 1, tall: 17.9,
+      popup: "1.5s", cover: "100%", sticky: "yes — from screen 1" },
+    { name: "Super Liver (ours)", short: "Super Liver", buybox: 2, tall: 17.2,
+      popup: "0.0s", cover: "100%", sticky: "no" },
+    { name: "More Labs", short: "More Labs", buybox: 2, tall: 13.4,
+      popup: "none", cover: "—", sticky: "no" },
+    { name: "Grüns", short: "Grüns", buybox: 3, tall: 18.2,
+      popup: "2.25s", cover: "100%", sticky: "no" },
+    { name: "The Absorption Company", short: "Absorption", buybox: 3, tall: 15.3,
+      popup: "0.0s", cover: "43% (cookie notice)", sticky: "yes — appears deeper" }
   ];
 
   // ---- helpers ----------------------------------------------------------
@@ -792,26 +797,26 @@
        ["Placed an order", num(2292), "1.48%"],
        ["Never added to a cart", num(154371 - 7852), "94.91%"]]);
 
-    // 7 — distance to the buy box
+    // 7 — which screen the buy button first appears on
     barChart(document.getElementById("c7"), document.getElementById("t7"), {
       labels: PAGES.map(function (p) { return p.short; }),
       values: PAGES.map(function (p) { return p.buybox; }),
-      max: 2, ticks: [0, 0.5, 1.0, 1.5, 2.0],
-      tickFmt: function (v) { return v.toFixed(1); },
-      thPrefix: "", seriesName: "Screens to buy box",
-      valueFmt: function (v) { return v.toFixed(2) + " screens"; },
-      tipNote: function (i) { return { nm: "Page height", vl: PAGES[i].tall.toFixed(1) + " screens" }; },
-      aria: "Distance from the top of the product page to the first add-to-cart control, in phone screen-heights. Super Liver is furthest at 1.7 screens; the others sit between 0.80 and 0.95."
+      max: 3.4, ticks: [0, 1, 2, 3],
+      tickFmt: function (v) { return v; },
+      thPrefix: "", seriesName: "Buy button appears on",
+      valueFmt: function (v) { return "screen " + v; },
+      tipNote: function (i) { return { nm: "Sticky buy bar", vl: PAGES[i].sticky }; },
+      aria: "Which phone screen the buy button first appears on. Cheers on screen 1, Super Liver and More Labs on screen 2, Grüns and The Absorption Company on screen 3."
     });
-    table(document.getElementById("tb7"), "Table view — distance to the first add-to-cart control, in phone screen-heights (390×844).",
-      ["Product page", "Screens to buy box", "Page height (screens)"],
-      PAGES.map(function (p) { return [p.name, p.buybox.toFixed(2), p.tall.toFixed(1)]; }));
+    table(document.getElementById("tb7"), "Table view — the screen each product page's buy button first appears on, at 390×844.",
+      ["Product page", "Buy button on screen", "Page height (screens)"],
+      PAGES.map(function (p) { return [p.name, "screen " + p.buybox, p.tall.toFixed(1)]; }));
 
     // 8 — full page measurement table (always visible)
-    table(document.getElementById("tb8"), "Measured in a real browser at 390×844 on 2026-08-16. “Buy bar on screen” means an add-to-cart control was visible after scrolling to that depth.",
-      ["Product page", "Pop-up appears", "Screen covered", "Screens to buy box", "Buy bar at 50%", "Buy bar at 90%"],
+    table(document.getElementById("tb8"), "Measured in a real browser at 390×844 on 2026-08-16 and verified against the published screenshots.",
+      ["Product page", "Pop-up appears", "Screen covered", "Buy button on screen", "Sticky buy bar"],
       PAGES.map(function (p) {
-        return [p.name, p.popup, p.cover, p.buybox.toFixed(2), p.mid, p.deep];
+        return [p.name, p.popup, p.cover, "screen " + p.buybox, p.sticky];
       }));
   }
 
