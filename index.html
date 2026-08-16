@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Super Bonsai — Web Revenue per Session, June 7 onward</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;
+    --plane: #f9f9f7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --critical: #d03b3b;
+    --good-text: #006300;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --plane: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --muted: #898781;
+      --grid: #2c2c2a;
+      --axis: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --critical: #d03b3b;
+      --good-text: #0ca30c;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --surface-1: #1a1a19;
+    --plane: #0d0d0d;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --critical: #d03b3b;
+    --good-text: #0ca30c;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--plane, #f9f9f7);
+  }
+  .viz-root {
+    background: var(--plane);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 32px 24px 64px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+
+  header.page { margin-bottom: 8px; }
+  h1 { font-size: 24px; line-height: 1.25; margin: 0 0 6px; font-weight: 650; letter-spacing: -0.01em; }
+  .sub { font-size: 13px; color: var(--text-secondary); margin: 0; }
+  .sub code { font-size: 12px; color: var(--muted); }
+
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    margin: 20px 0 24px; padding: 10px 12px;
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .controls .label { font-size: 12px; color: var(--muted); margin-right: 2px; }
+  button.ctl {
+    font: inherit; font-size: 13px; color: var(--text-primary);
+    background: transparent; border: 1px solid var(--border);
+    border-radius: 7px; padding: 5px 11px; cursor: pointer;
+  }
+  button.ctl:hover { background: var(--plane); }
+  button.ctl[aria-pressed="true"] { background: var(--plane); border-color: var(--axis); font-weight: 600; }
+
+  .card {
+    background: var(--surface-1); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 22px; margin-bottom: 20px;
+  }
+  .card h2 { font-size: 15px; font-weight: 620; margin: 0 0 2px; letter-spacing: -0.005em; }
+  .card .note { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 16px; line-height: 1.5; }
+
+  /* hero */
+  .hero { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-end; }
+  .hero .fig { font-size: 60px; line-height: 1; font-weight: 640; letter-spacing: -0.03em; }
+  .hero .figlab { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
+  .hero .delta { font-size: 17px; font-weight: 600; color: var(--critical); }
+  .hero .vs { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .tile .k { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.045em; }
+  .tile .v { font-size: 30px; font-weight: 620; letter-spacing: -0.02em; margin: 7px 0 4px; }
+  .tile .d { font-size: 12.5px; font-weight: 600; }
+  .tile .d.down { color: var(--critical); }
+  .tile .d.up { color: var(--good-text); }
+  .tile .b { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin: 0 0 10px; }
+  .legend .item { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--text-secondary); }
+  .legend .swatch { width: 11px; height: 11px; border-radius: 3px; flex: none; }
+
+  .chartbox { position: relative; }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .grid-line { stroke: var(--grid); stroke-width: 1; }
+  .axis-line { stroke: var(--axis); stroke-width: 1; }
+  .tick { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .dlabel { font-size: 11.5px; font-weight: 600; }
+  .anno { font-size: 11px; fill: var(--text-secondary); }
+
+  .tip {
+    position: absolute; pointer-events: none; opacity: 0;
+    transition: opacity .09s ease; z-index: 5;
+    background: var(--surface-1); border: 1px solid var(--axis);
+    border-radius: 8px; padding: 8px 10px; min-width: 148px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.13);
+    font-size: 12px; color: var(--text-primary);
+  }
+  .tip .th { font-weight: 640; margin-bottom: 5px; font-size: 12px; }
+  .tip .row { display: flex; align-items: center; gap: 7px; margin-top: 3px; }
+  .tip .row .sw { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+  .tip .row .nm { color: var(--text-secondary); flex: 1; }
+  .tip .row .vl { font-weight: 620; font-variant-numeric: tabular-nums; }
+  .tip .pt { margin-top: 6px; font-size: 11px; color: var(--muted); }
+
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  caption { text-align: left; font-size: 12px; color: var(--muted); padding-bottom: 8px; }
+  th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; font-variant-numeric: normal; }
+  thead th { color: var(--text-secondary); font-weight: 600; border-bottom: 1px solid var(--axis); }
+  .tblwrap { margin-top: 18px; overflow-x: auto; }
+  .tblwrap[hidden] { display: none; }
+
+  .findings { display: grid; gap: 12px; }
+  .finding { border-left: 3px solid var(--axis); padding: 2px 0 2px 14px; }
+  .finding.refuted { border-left-color: var(--critical); }
+  .finding.confirmed { border-left-color: var(--series-3); }
+  .finding .vt { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+  .finding .cl { font-size: 13.5px; font-weight: 620; margin: 3px 0 4px; }
+  .finding p { font-size: 13px; line-height: 1.55; color: var(--text-secondary); margin: 0; }
+  .finding p + p { margin-top: 6px; }
+
+  footer.page { font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+
+  <header class="page">
+    <h1>Web revenue per session is down 42% — and it is not a tracking artifact</h1>
+    <p class="sub">Super Bonsai · <code>superbonsai.myshopify.com</code> · Online Store channel only, June 7 – August 16, 2026 · Source: Shopify ShopifyQL (<code>sales</code>, <code>sessions</code>), pulled 2026-08-16</p>
+  </header>
+
+  <div class="controls">
+    <span class="label">View</span>
+    <button class="ctl" id="themeBtn" aria-pressed="false">Dark mode</button>
+    <button class="ctl" id="tableBtn" aria-pressed="false">Show data tables</button>
+  </div>
+
+  <div class="card">
+    <div class="hero">
+      <div>
+        <div class="fig" id="heroFig">$1.11</div>
+        <div class="figlab">Web revenue per session — week of Aug&nbsp;3 (last complete week)</div>
+      </div>
+      <div>
+        <div class="delta">−41.6%</div>
+        <div class="vs">vs. $1.90 June baseline (Jun&nbsp;8 – Jul&nbsp;5)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile">
+      <div class="k">Web revenue / week</div>
+      <div class="v">$63,955</div>
+      <div class="d down">−46.3%</div>
+      <div class="b">June baseline $119,009/wk</div>
+    </div>
+    <div class="tile">
+      <div class="k">Web conversion rate</div>
+      <div class="v">1.76%</div>
+      <div class="d down">−45.1%</div>
+      <div class="b">June baseline 3.22%</div>
+    </div>
+    <div class="tile">
+      <div class="k">Web AOV</div>
+      <div class="v">$63.07</div>
+      <div class="d up">+6.5%</div>
+      <div class="b">June baseline $59.20</div>
+    </div>
+    <div class="tile">
+      <div class="k">Web sessions / week</div>
+      <div class="v">57,487</div>
+      <div class="d down">−8.1%</div>
+      <div class="b">June baseline 62,519/wk</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Web revenue per session, by week</h2>
+    <p class="note">The lead metric. Revenue ÷ sessions collapses conversion and order value into one number, and it is the figure the traffic-quality debate is actually about. Weeks are Monday-start, matching Shopify's buckets.</p>
+    <div class="chartbox"><div id="c1"></div><div class="tip" id="t1"></div></div>
+    <div class="tblwrap" hidden id="tb1"></div>
+  </div>
+
+  <div class="card">
+    <h2>What moved: conversion collapsed, order value did not compensate</h2>
+    <p class="note">All three series indexed to the June baseline = 100, on a single axis. RPS index = CVR index × AOV index ÷ 100 exactly, so this chart is the full decomposition — there is no residual.</p>
+    <div class="legend" id="l2"></div>
+    <div class="chartbox"><div id="c2"></div><div class="tip" id="t2"></div></div>
+    <div class="tblwrap" hidden id="tb2"></div>
+  </div>
+
+  <div class="card">
+    <h2>Web revenue per week (Online Store channel)</h2>
+    <p class="note">Absolute dollars — immune to any session-counting question, since the numerator does not depend on traffic measurement. Subscriptions (Skio) and Ownbase are excluded; they are declining far more slowly.</p>
+    <div class="chartbox"><div id="c3"></div><div class="tip" id="t3"></div></div>
+    <div class="tblwrap" hidden id="tb3"></div>
+  </div>
+
+  <div class="card">
+    <h2>Where the August 13 session drop came from</h2>
+    <p class="note">Daily sessions by referrer. When the Escape Hatch was removed on Aug&nbsp;13, the drop landed almost entirely in the direct / unattributed bucket — not in Instagram, which barely moved.</p>
+    <div class="legend" id="l4"></div>
+    <div class="chartbox"><div id="c4"></div><div class="tip" id="t4"></div></div>
+    <div class="tblwrap" hidden id="tb4"></div>
+  </div>
+
+  <div class="card">
+    <h2>Verdicts on the three open questions</h2>
+    <div class="findings">
+      <div class="finding refuted">
+        <div class="vt">Refuted</div>
+        <div class="cl">The pre-July baseline was 3.2%, not the 2.5–3% the owner remembers.</div>
+        <p>Measured sitewide conversion for Jun&nbsp;8 – Jul&nbsp;5 is <strong>3.16%</strong>; the two spot weeks check out at <strong>3.18%</strong> (Jun&nbsp;22) and <strong>3.44%</strong> (Jun&nbsp;29). No day in the whole June baseline fell below 2.65%. The measured numbers are right and the remembered range is low — which means the decline is <em>larger</em> than the owner currently believes, not smaller.</p>
+      </div>
+      <div class="finding refuted">
+        <div class="vt">Refuted</div>
+        <div class="cl">AOV is up ~6.5%, not the +26% implied by the −40% ÷ −52% arithmetic.</div>
+        <p>Aligning both metrics to the same window and the same channel (Online Store, week of Aug&nbsp;3 vs. the June baseline): RPS −41.6%, CVR −45.1%, AOV <strong>+6.5%</strong>. Those three reconcile exactly (0.549 × 1.065 = 0.585). The +26% came from dividing an RPS and a CVR measured over different windows.</p>
+        <p>On Shopify's own <code>average_order_value</code> metric the lift reads larger — $51.40 → $57.42, about +13.8% — because that metric excludes post-order adjustments. Either way it is well short of +26%, and it has been fading since late July.</p>
+      </div>
+      <div class="finding confirmed">
+        <div class="vt">Confirmed, with a corrected cause</div>
+        <div class="cl">Phantom sessions were ~19% of traffic — but they were direct, not Instagram.</div>
+        <p>Day-of-week-matched Thu–Sat, the last pre-removal window (Aug&nbsp;6–8) against the first clean one (Aug&nbsp;13–15): total sessions 23,460 → 19,108, <strong>−18.5%</strong>. So the ~20% estimate holds on magnitude.</p>
+        <p>The attribution does not. Of the 4,352 sessions lost, <strong>3,571 (82%) were direct / unattributed</strong>; Facebook gave up 686 and Instagram only 352 — a 4.4% dip, inside its normal week-to-week drift (Instagram ran 8,082 → 7,918 → 7,566 across the three Thu–Sat windows, a gentle slope with no step at Aug&nbsp;13). The "3,731 → 2,357" reading compares a single Instagram peak day (Aug&nbsp;11) against a trough, not a like-for-like window.</p>
+        <p>Consequence: stripping ~19% of phantom sessions raises the Aug&nbsp;6–8 conversion rate from 2.09% to 2.57% — real, but it closes only about a third of the gap to the 3.22% June baseline. Most of the conversion decline survives the correction.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page">
+    <p>Notes · The week of Aug&nbsp;10 is partial (through Aug&nbsp;16, ~6.6 days) and is drawn hollow throughout; it is excluded from every headline comparison. · Aug&nbsp;9 carries a Google-referrer spike of 6,658 sessions against a ~500/day norm, almost certainly non-human; it depresses that day's conversion to 0.82% and is left in the data unadjusted. · Conversion here is Online Store orders ÷ sessions, which tracks Shopify's <code>conversion_rate</code> closely (1.76% vs. 1.73% for the week of Aug&nbsp;3) and keeps the CVR × AOV decomposition exact.</p>
+  </footer>
+
+</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- data -------------------------------------------------------------
+  // Online Store (web) channel, Monday-start weeks. Sessions are sitewide
+  // online-store sessions (the web denominator).
+  var WEEKS = [
+    { w: "Jun 8",  rev: 118285.02, ord: 2038, ses: 65788, partial: false },
+    { w: "Jun 15", rev: 130699.16, ord: 2227, ses: 71227, partial: false },
+    { w: "Jun 22", rev: 115564.01, ord: 1929, ses: 60007, partial: false },
+    { w: "Jun 29", rev: 111486.35, ord: 1847, ses: 53052, partial: false },
+    { w: "Jul 6",  rev:  90561.34, ord: 1484, ses: 58942, partial: false },
+    { w: "Jul 13", rev:  70093.28, ord: 1085, ses: 46387, partial: false },
+    { w: "Jul 20", rev:  76773.34, ord: 1171, ses: 55329, partial: false },
+    { w: "Jul 27", rev:  69428.72, ord: 1076, ses: 60545, partial: false },
+    { w: "Aug 3",  rev:  63955.40, ord: 1014, ses: 57487, partial: false },
+    { w: "Aug 10", rev:  47247.00, ord:  799, ses: 49544, partial: true  }
+  ];
+  WEEKS.forEach(function (d) {
+    d.rps = d.rev / d.ses;
+    d.cvr = d.ord / d.ses;
+    d.aov = d.rev / d.ord;
+  });
+
+  // June baseline = first four complete weeks (Jun 8 - Jul 5)
+  var BASE = (function () {
+    var b = WEEKS.slice(0, 4).reduce(function (a, d) {
+      a.rev += d.rev; a.ord += d.ord; a.ses += d.ses; return a;
+    }, { rev: 0, ord: 0, ses: 0 });
+    return { rps: b.rev / b.ses, cvr: b.ord / b.ses, aov: b.rev / b.ord, rev: b.rev / 4, ses: b.ses / 4 };
+  })();
+
+  // Daily sessions by referrer bucket, Jul 20 - Aug 15 (Aug 16 partial, omitted)
+  var DAILY = [
+    ["Jul 20", 2380, 3500, 1032], ["Jul 21", 2055, 3516, 1098], ["Jul 22", 2221, 3541,  991],
+    ["Jul 23", 2317, 3486, 1132], ["Jul 24", 2923, 3869, 1579], ["Jul 25", 2227, 3757, 1656],
+    ["Jul 26", 2423, 4280, 1532], ["Jul 27", 2630, 5447, 1537], ["Jul 28", 4208, 5078, 1280],
+    ["Jul 29", 3535, 3596, 1134], ["Jul 30", 4189, 2878,  875], ["Jul 31", 3521, 2904,  522],
+    ["Aug 1",  2989, 2300,  669], ["Aug 2",  3455, 2594,  741], ["Aug 3",  3884, 2332,  623],
+    ["Aug 4",  2951, 1922,  636], ["Aug 5",  2864, 2144, 1060], ["Aug 6",  3771, 2685, 1083],
+    ["Aug 7",  3460, 2922, 1223], ["Aug 8",  3162, 2311, 1052], ["Aug 9",  3383, 2208,  957],
+    ["Aug 10", 3730, 3041,  909], ["Aug 11", 3758, 3731, 1149], ["Aug 12", 3170, 2830,  918],
+    ["Aug 13", 2115, 2408,  942], ["Aug 14", 1838, 2665,  955], ["Aug 15", 2869, 2493,  775]
+  ].map(function (r) { return { d: r[0], direct: r[1], ig: r[2], fb: r[3] }; });
+
+  var EH_INDEX = DAILY.findIndex(function (r) { return r.d === "Aug 13"; });
+
+  // ---- helpers ----------------------------------------------------------
+  var NS = "http://www.w3.org/2000/svg";
+  function el(n, attrs, txt) {
+    var e = document.createElementNS(NS, n);
+    for (var k in attrs) if (attrs[k] != null) e.setAttribute(k, attrs[k]);
+    if (txt != null) e.textContent = txt;
+    return e;
+  }
+  function css(name) {
+    return getComputedStyle(document.querySelector(".viz-root")).getPropertyValue(name).trim();
+  }
+  var money = function (v, dp) { return "$" + v.toFixed(dp == null ? 2 : dp).replace(/\B(?=(\d{3})+(?!\d))/g, ","); };
+  var num = function (v) { return Math.round(v).toLocaleString("en-US"); };
+  var pct = function (v) { return (v * 100).toFixed(2) + "%"; };
+  function signed(v) { return (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(1) + "%"; }
+
+  // ---- generic line chart -----------------------------------------------
+  // series: [{ key, name, color, values:[], fmt }]
+  function lineChart(host, tipEl, opts) {
+    var W = 1000, H = opts.height || 330;
+    var M = { t: 18, r: opts.right || 74, b: 42, l: opts.left || 56 };
+    var pw = W - M.l - M.r, ph = H - M.t - M.b;
+    var labels = opts.labels, series = opts.series, n = labels.length;
+
+    var lo = opts.min, hi = opts.max;
+    var x = function (i) { return M.l + (n === 1 ? pw / 2 : (pw * i) / (n - 1)); };
+    var y = function (v) { return M.t + ph - ((v - lo) / (hi - lo)) * ph; };
+
+    host.innerHTML = "";
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": opts.aria });
+
+    // gridlines + y ticks
+    opts.ticks.forEach(function (tv) {
+      svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(tv), y2: y(tv), class: "grid-line" }));
+      svg.appendChild(el("text", { x: M.l - 10, y: y(tv) + 4, "text-anchor": "end", class: "tick" }, opts.tickFmt(tv)));
+    });
+
+    // reference line
+    if (opts.ref != null) {
+      svg.appendChild(el("line", {
+        x1: M.l, x2: M.l + pw, y1: y(opts.ref), y2: y(opts.ref),
+        stroke: css("--axis"), "stroke-width": 1
+      }));
+      svg.appendChild(el("text", { x: M.l + 6, y: y(opts.ref) - 7, class: "anno" }, opts.refLabel));
+    }
+
+    // event marker
+    if (opts.marker != null) {
+      var mx = x(opts.marker.i);
+      svg.appendChild(el("line", { x1: mx, x2: mx, y1: M.t, y2: M.t + ph, stroke: css("--critical"), "stroke-width": 1 }));
+      var ml = el("text", { x: mx + 7, y: M.t + 13, class: "anno", fill: css("--critical") }, opts.marker.label);
+      svg.appendChild(ml);
+    }
+
+    // baseline
+    svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: M.t + ph, y2: M.t + ph, class: "axis-line" }));
+
+    // x ticks
+    labels.forEach(function (lb, i) {
+      if (opts.everyOther && i % 2 !== 0 && i !== n - 1) return;
+      svg.appendChild(el("text", { x: x(i), y: M.t + ph + 20, "text-anchor": "middle", class: "tick" }, lb));
+    });
+
+    // series paths
+    var endLabels = [];
+    series.forEach(function (s) {
+      var solid = [], dashed = null;
+      s.values.forEach(function (v, i) { solid.push((i ? "L" : "M") + x(i) + " " + y(v)); });
+      if (opts.partialFrom != null && opts.partialFrom > 0) {
+        var pf = opts.partialFrom;
+        solid = s.values.slice(0, pf).map(function (v, i) { return (i ? "L" : "M") + x(i) + " " + y(v); });
+        dashed = "M" + x(pf - 1) + " " + y(s.values[pf - 1]) + " L" + x(pf) + " " + y(s.values[pf]);
+      }
+      svg.appendChild(el("path", {
+        d: solid.join(" "), fill: "none", stroke: s.color, "stroke-width": 2,
+        "stroke-linejoin": "round", "stroke-linecap": "round"
+      }));
+      if (dashed) {
+        svg.appendChild(el("path", {
+          d: dashed, fill: "none", stroke: s.color, "stroke-width": 2,
+          "stroke-dasharray": "4 4", "stroke-linecap": "round"
+        }));
+      }
+      // endpoint marker + direct label
+      var li = s.values.length - 1;
+      var isPartial = opts.partialFrom != null && li >= opts.partialFrom;
+      svg.appendChild(el("circle", {
+        cx: x(li), cy: y(s.values[li]), r: 5,
+        fill: isPartial ? css("--surface-1") : s.color,
+        stroke: isPartial ? s.color : css("--surface-1"), "stroke-width": 2
+      }));
+      endLabels.push({ x: x(li) + 11, y: y(s.values[li]) + 4, text: s.fmt(s.values[li]) });
+    });
+
+    // de-collide direct labels, then draw them
+    endLabels.sort(function (a, b) { return a.y - b.y; });
+    for (var q = 1; q < endLabels.length; q++) {
+      var gap = endLabels[q].y - endLabels[q - 1].y;
+      if (gap < 15) endLabels[q].y = endLabels[q - 1].y + 15;
+    }
+    endLabels.forEach(function (L) {
+      svg.appendChild(el("text", { x: L.x, y: L.y, class: "dlabel", fill: css("--text-primary") }, L.text));
+    });
+
+    // hover layer
+    var focus = el("g", { opacity: 0 });
+    var vline = el("line", { y1: M.t, y2: M.t + ph, stroke: css("--axis"), "stroke-width": 1 });
+    focus.appendChild(vline);
+    var dots = series.map(function (s) {
+      var c = el("circle", { r: 5, fill: s.color, stroke: css("--surface-1"), "stroke-width": 2 });
+      focus.appendChild(c); return c;
+    });
+    svg.appendChild(focus);
+    var hit = el("rect", { x: M.l, y: M.t, width: pw, height: ph, fill: "transparent" });
+    svg.appendChild(hit);
+    host.appendChild(svg);
+
+    function idxFromEvent(ev) {
+      var r = svg.getBoundingClientRect();
+      var px = ((ev.clientX - r.left) / r.width) * W;
+      var i = Math.round(((px - M.l) / pw) * (n - 1));
+      return Math.max(0, Math.min(n - 1, i));
+    }
+    function show(ev) {
+      var i = idxFromEvent(ev);
+      focus.setAttribute("opacity", 1);
+      vline.setAttribute("x1", x(i)); vline.setAttribute("x2", x(i));
+      dots.forEach(function (c, k) { c.setAttribute("cx", x(i)); c.setAttribute("cy", y(series[k].values[i])); });
+      var html = '<div class="th">' + labels[i] + (opts.thSuffix || "") + "</div>";
+      series.forEach(function (s) {
+        html += '<div class="row"><span class="sw" style="background:' + s.color + '"></span>' +
+                '<span class="nm">' + s.name + '</span><span class="vl">' + s.fmt(s.values[i]) + "</span></div>";
+      });
+      if (opts.partialFrom != null && i >= opts.partialFrom) html += '<div class="pt">Partial week — through Aug 16</div>';
+      if (opts.tipNote) { var extra = opts.tipNote(i); if (extra) html += '<div class="pt">' + extra + "</div>"; }
+      tipEl.innerHTML = html;
+      tipEl.style.opacity = 1;
+      var box = host.getBoundingClientRect();
+      var relX = (x(i) / W) * box.width;
+      var tw = tipEl.offsetWidth;
+      tipEl.style.left = Math.max(0, Math.min(box.width - tw, relX - tw / 2)) + "px";
+      tipEl.style.top = "8px";
+    }
+    hit.addEventListener("mousemove", show);
+    hit.addEventListener("mouseleave", function () {
+      focus.setAttribute("opacity", 0); tipEl.style.opacity = 0;
+    });
+  }
+
+  // ---- generic bar chart ------------------------------------------------
+  function barChart(host, tipEl, opts) {
+    var W = 1000, H = 300;
+    var M = { t: 18, r: 20, b: 42, l: 66 };
+    var pw = W - M.l - M.r, ph = H - M.t - M.b;
+    var vals = opts.values, labels = opts.labels, n = vals.length;
+    var hi = opts.max;
+    var slot = pw / n, bw = Math.min(56, slot - 12);
+    var y = function (v) { return M.t + ph - (v / hi) * ph; };
+    var cx = function (i) { return M.l + slot * i + slot / 2; };
+
+    host.innerHTML = "";
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": opts.aria });
+
+    opts.ticks.forEach(function (tv) {
+      svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(tv), y2: y(tv), class: "grid-line" }));
+      svg.appendChild(el("text", { x: M.l - 10, y: y(tv) + 4, "text-anchor": "end", class: "tick" }, opts.tickFmt(tv)));
+    });
+    if (opts.ref != null) {
+      svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(opts.ref), y2: y(opts.ref), stroke: css("--axis"), "stroke-width": 1 }));
+      svg.appendChild(el("text", { x: M.l + 6, y: y(opts.ref) - 7, class: "anno" }, opts.refLabel));
+    }
+    svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: M.t + ph, y2: M.t + ph, class: "axis-line" }));
+
+    var color = css("--series-1");
+    vals.forEach(function (v, i) {
+      var isPartial = opts.partialFrom != null && i >= opts.partialFrom;
+      var h = Math.max(4, M.t + ph - y(v));
+      var r = el("path", {
+        d: roundedTopRect(cx(i) - bw / 2, y(v), bw, h, 4),
+        fill: isPartial ? "none" : color,
+        stroke: isPartial ? color : "none",
+        "stroke-width": isPartial ? 2 : 0,
+        "stroke-dasharray": isPartial ? "4 4" : null
+      });
+      svg.appendChild(r);
+      svg.appendChild(el("text", { x: cx(i), y: M.t + ph + 20, "text-anchor": "middle", class: "tick" }, labels[i]));
+    });
+
+    var hit = el("rect", { x: M.l, y: M.t, width: pw, height: ph, fill: "transparent" });
+    svg.appendChild(hit);
+    host.appendChild(svg);
+
+    hit.addEventListener("mousemove", function (ev) {
+      var rct = svg.getBoundingClientRect();
+      var px = ((ev.clientX - rct.left) / rct.width) * W;
+      var i = Math.max(0, Math.min(n - 1, Math.floor((px - M.l) / slot)));
+      var html = '<div class="th">Week of ' + labels[i] + "</div>" +
+        '<div class="row"><span class="sw" style="background:' + color + '"></span>' +
+        '<span class="nm">Web revenue</span><span class="vl">' + money(vals[i], 0) + "</span></div>" +
+        '<div class="row"><span class="sw" style="background:transparent"></span>' +
+        '<span class="nm">vs. June baseline</span><span class="vl">' + signed((vals[i] / opts.ref - 1) * 100) + "</span></div>";
+      if (opts.partialFrom != null && i >= opts.partialFrom) html += '<div class="pt">Partial week — through Aug 16</div>';
+      tipEl.innerHTML = html;
+      tipEl.style.opacity = 1;
+      var box = host.getBoundingClientRect();
+      var relX = (cx(i) / W) * box.width, tw = tipEl.offsetWidth;
+      tipEl.style.left = Math.max(0, Math.min(box.width - tw, relX - tw / 2)) + "px";
+      tipEl.style.top = "8px";
+    });
+    hit.addEventListener("mouseleave", function () { tipEl.style.opacity = 0; });
+  }
+  function roundedTopRect(x, y, w, h, r) {
+    r = Math.min(r, w / 2, h);
+    return "M" + x + " " + (y + h) + " L" + x + " " + (y + r) +
+           " Q" + x + " " + y + " " + (x + r) + " " + y +
+           " L" + (x + w - r) + " " + y +
+           " Q" + (x + w) + " " + y + " " + (x + w) + " " + (y + r) +
+           " L" + (x + w) + " " + (y + h) + " Z";
+  }
+
+  // ---- legends & tables --------------------------------------------------
+  function legend(host, items) {
+    host.innerHTML = items.map(function (it) {
+      return '<span class="item"><span class="swatch" style="background:' + it.color + '"></span>' + it.name + "</span>";
+    }).join("");
+  }
+  function table(host, caption, head, rows) {
+    var h = "<table><caption>" + caption + "</caption><thead><tr>" +
+      head.map(function (c) { return "<th scope='col'>" + c + "</th>"; }).join("") + "</tr></thead><tbody>";
+    rows.forEach(function (r) {
+      h += "<tr>" + r.map(function (c, i) { return i === 0 ? "<th scope='row'>" + c + "</th>" : "<td>" + c + "</td>"; }).join("") + "</tr>";
+    });
+    host.innerHTML = h + "</tbody></table>";
+  }
+
+  // ---- render ------------------------------------------------------------
+  var PF = WEEKS.findIndex(function (d) { return d.partial; });
+
+  function renderAll() {
+    var s1 = css("--series-1"), s2 = css("--series-2"), s3 = css("--series-3");
+    var wl = WEEKS.map(function (d) { return d.w; });
+
+    // 1 — RPS
+    lineChart(document.getElementById("c1"), document.getElementById("t1"), {
+      labels: wl, min: 0, max: 2.25,
+      ticks: [0, 0.5, 1.0, 1.5, 2.0],
+      tickFmt: function (v) { return "$" + v.toFixed(2); },
+      ref: BASE.rps, refLabel: "June baseline $" + BASE.rps.toFixed(2),
+      partialFrom: PF, thSuffix: " week",
+      aria: "Web revenue per session by week, falling from $1.80 in June to $1.11 by the week of August 3.",
+      series: [{ name: "Revenue per session", color: s1, values: WEEKS.map(function (d) { return d.rps; }),
+                 fmt: function (v) { return "$" + v.toFixed(2); } }],
+      tipNote: function (i) { return "vs. June baseline " + signed((WEEKS[i].rps / BASE.rps - 1) * 100); }
+    });
+    table(document.getElementById("tb1"), "Table view — web revenue per session by week (Online Store channel).",
+      ["Week of", "Web revenue", "Web orders", "Sessions", "RPS", "vs. baseline"],
+      WEEKS.map(function (d) {
+        return [d.w + (d.partial ? " (partial)" : ""), money(d.rev, 0), num(d.ord), num(d.ses),
+                "$" + d.rps.toFixed(3), signed((d.rps / BASE.rps - 1) * 100)];
+      }));
+
+    // 2 — indexed decomposition
+    var idx = function (get, base) { return WEEKS.map(function (d) { return (get(d) / base) * 100; }); };
+    var iRps = idx(function (d) { return d.rps; }, BASE.rps);
+    var iCvr = idx(function (d) { return d.cvr; }, BASE.cvr);
+    var iAov = idx(function (d) { return d.aov; }, BASE.aov);
+    var items2 = [
+      { name: "Revenue per session", color: s1 },
+      { name: "Conversion rate", color: s2 },
+      { name: "Average order value", color: s3 }
+    ];
+    legend(document.getElementById("l2"), items2);
+    lineChart(document.getElementById("c2"), document.getElementById("t2"), {
+      labels: wl, min: 40, max: 120, right: 108,
+      ticks: [40, 60, 80, 100, 120],
+      tickFmt: function (v) { return v; },
+      ref: 100, refLabel: "June baseline = 100",
+      partialFrom: PF, thSuffix: " week",
+      aria: "Indexed to the June baseline, conversion rate falls to 55 while average order value rises to 107, dragging revenue per session to 58.",
+      series: [
+        { name: "Revenue per session", color: s1, values: iRps, fmt: function (v) { return v.toFixed(1); } },
+        { name: "Conversion rate", color: s2, values: iCvr, fmt: function (v) { return v.toFixed(1); } },
+        { name: "Average order value", color: s3, values: iAov, fmt: function (v) { return v.toFixed(1); } }
+      ]
+    });
+    table(document.getElementById("tb2"), "Table view — conversion rate and average order value, actual and indexed to the June baseline (= 100).",
+      ["Week of", "CVR", "CVR idx", "AOV", "AOV idx", "RPS idx"],
+      WEEKS.map(function (d, i) {
+        return [d.w + (d.partial ? " (partial)" : ""), pct(d.cvr), iCvr[i].toFixed(1),
+                money(d.aov), iAov[i].toFixed(1), iRps[i].toFixed(1)];
+      }));
+
+    // 3 — weekly revenue bars
+    barChart(document.getElementById("c3"), document.getElementById("t3"), {
+      labels: wl, values: WEEKS.map(function (d) { return d.rev; }),
+      max: 140000, ticks: [0, 35000, 70000, 105000, 140000],
+      tickFmt: function (v) { return "$" + (v / 1000) + "k"; },
+      ref: BASE.rev, refLabel: "June baseline " + money(BASE.rev, 0) + "/wk",
+      partialFrom: PF,
+      aria: "Weekly Online Store revenue falling from about $119,000 per week in June to $63,955 in the week of August 3."
+    });
+    table(document.getElementById("tb3"), "Table view — Online Store (web) gross sales per week.",
+      ["Week of", "Web revenue", "vs. baseline"],
+      WEEKS.map(function (d) { return [d.w + (d.partial ? " (partial)" : ""), money(d.rev, 0), signed((d.rev / BASE.rev - 1) * 100)]; }));
+
+    // 4 — sessions by referrer
+    var items4 = [
+      { name: "Direct / unattributed", color: s1 },
+      { name: "Instagram", color: s2 },
+      { name: "Facebook", color: s3 }
+    ];
+    legend(document.getElementById("l4"), items4);
+    lineChart(document.getElementById("c4"), document.getElementById("t4"), {
+      labels: DAILY.map(function (d) { return d.d; }), min: 0, max: 6000, everyOther: true, right: 86,
+      ticks: [0, 1500, 3000, 4500, 6000],
+      tickFmt: function (v) { return num(v); },
+      marker: { i: EH_INDEX, label: "Escape Hatch removed" },
+      aria: "Daily sessions by referrer. On August 13 the direct bucket steps down sharply while Instagram continues its gentle slope.",
+      series: [
+        { name: "Direct / unattributed", color: s1, values: DAILY.map(function (d) { return d.direct; }), fmt: num },
+        { name: "Instagram", color: s2, values: DAILY.map(function (d) { return d.ig; }), fmt: num },
+        { name: "Facebook", color: s3, values: DAILY.map(function (d) { return d.fb; }), fmt: num }
+      ]
+    });
+    table(document.getElementById("tb4"), "Table view — daily sessions by referrer, July 20 to August 15. The Escape Hatch was removed on August 13.",
+      ["Day", "Direct / unattributed", "Instagram", "Facebook"],
+      DAILY.map(function (d) { return [d.d, num(d.direct), num(d.ig), num(d.fb)]; }));
+  }
+
+  renderAll();
+
+  // ---- controls ----------------------------------------------------------
+  var themeBtn = document.getElementById("themeBtn");
+  themeBtn.addEventListener("click", function () {
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+    themeBtn.setAttribute("aria-pressed", String(!dark));
+    themeBtn.textContent = dark ? "Dark mode" : "Light mode";
+    renderAll();
+  });
+
+  var tableBtn = document.getElementById("tableBtn");
+  tableBtn.addEventListener("click", function () {
+    var on = tableBtn.getAttribute("aria-pressed") === "true";
+    tableBtn.setAttribute("aria-pressed", String(!on));
+    tableBtn.textContent = on ? "Show data tables" : "Hide data tables";
+    ["tb1", "tb2", "tb3", "tb4"].forEach(function (id) { document.getElementById(id).hidden = on; });
+  });
+
+  window.addEventListener("resize", renderAll);
+})();
+</script>
+</body>
+</html>
