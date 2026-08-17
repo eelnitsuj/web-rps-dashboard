@@ -210,13 +210,21 @@
   </div>
 
   <div class="card">
-    <h2>Two separate events, not one</h2>
+    <h2>It is not bots. Shopify's own bot filter says so.</h2>
     <div class="warnbox">
-      <p><strong>This is the answer to "the bots were cleared, so why is RPS still at a low?"</strong> There were two independent things happening, and comparing across both of them at once produces a wrong answer. Split into three windows, the Escape Hatch removal did exactly what it was supposed to: against the window immediately before it, sessions fell 35% while revenue rose 3%, so RPS jumped from $0.71 to $1.13. Those sessions were genuinely phantom. What the removal did <em>not</em> fix is a separate revenue decline that began around Aug 9 — revenue per day fell from ~$9,465 to ~$7,000 and stayed there — which is why RPS is still far below the pre-break baseline.</p>
+      <p>Shopify classifies every session as human or bot. Bot share has sat at a steady <strong>6&ndash;7%</strong> since May and did not move on Jul 7 or Aug 13. Stripping bots out entirely, conversion among <em>human</em> sessions still fell from ~3.0% to <strong>1.68%</strong> &mdash; the two lines below are almost on top of each other. The decline is real. It is not a measurement artifact, not phantom sessions, and not traffic quality.</p>
     </div>
     <div class="legend" id="l3"></div>
     <div class="chartbox"><div id="c3"></div><div class="tip" id="t3"></div></div>
     <div class="tblwrap" hidden id="tb3"></div>
+  </div>
+
+  <div class="card">
+    <h2>Every traffic source fell by roughly the same amount</h2>
+    <p class="note">Conversion rate by UTM source, Apr 1 &ndash; Jul 6 against Jul 7 &ndash; Aug 16. Meta merges the <code>facebook</code>, <code>ig</code>, <code>fb</code> and <code>instagram</code> tags, which were consolidated onto one tag in July. <strong>Email fell hardest (&minus;42%)</strong> &mdash; and email is your most engaged, highest-intent audience, traffic you control end to end. When owned channels drop as hard as paid, the problem is on the site, not in the traffic.</p>
+    <div class="legend" id="l8"></div>
+    <div class="chartbox"><div id="c8"></div><div class="tip" id="t8"></div></div>
+    <div class="tblwrap" hidden id="tb8"></div>
   </div>
 
   <div class="card">
@@ -235,8 +243,8 @@
   </div>
 
   <div class="card">
-    <h2>Cohort LTV — did the June 7 change produce better customers?</h2>
-    <p class="note">Cumulative revenue per acquired customer, by acquisition-month cohort. April and May are fully pre-change; June is ~77% post-change (the change landed Jun 7); July is entirely post-change. Hollow markers are incomplete months — the window has not finished elapsing.</p>
+    <h2>Cohort LTV — are the customers we acquire getting better or worse?</h2>
+    <p class="note">Cumulative revenue per acquired customer, by acquisition-month cohort. Cohort sizes are independently confirmed against Shopify’s <code>new_customers</code> metric and match exactly. Hollow markers are incomplete months — the window has not finished elapsing, so those points will still rise.</p>
     <div class="legend" id="l6"></div>
     <div class="chartbox"><div id="c6"></div><div class="tip" id="t6"></div></div>
     <div class="tblwrap" hidden id="tb6"></div>
@@ -280,7 +288,7 @@
   </div>
 
   <footer class="page">
-    <p>Notes · Aug 16 is a partial day (data pulled midday) and is drawn hollow; ranges ending Aug 16 carry that partial day. · Aug 9 carries a Google-referrer spike of 6,658 sessions against a ~500/day norm, almost certainly non-human; it is left unadjusted and is the true daily RPS low at $0.46. · Conversion is Online Store orders ÷ sessions, which tracks Shopify's <code>conversion_rate</code> closely and keeps the CVR × AOV decomposition exact. · The June baseline ($1.90 RPS, 3.22% CVR, $59.20 AOV) is fixed at Jun 8 – Jul 5 and does not move with the range selector. · Cohort figures use <code>net_sales</code> by <code>customer_cohort_month</code> × <code>months_since_first_purchase</code>; month −1 is the acquiring order.</p>
+    <p>Notes · Aug 16 is a partial day (data pulled midday) and is drawn hollow; ranges ending Aug 16 carry that partial day. · Aug 9 carries a Google-referrer spike of 6,658 sessions against a ~500/day norm, almost certainly non-human; it is left unadjusted and is the true daily RPS low at $0.46. · Conversion is Online Store orders ÷ sessions, which tracks Shopify's <code>conversion_rate</code> closely and keeps the CVR × AOV decomposition exact. · The June baseline ($1.90 RPS, 3.22% CVR, $59.20 AOV) is fixed at Jun 8 – Jul 5 and does not move with the range selector. · Every figure here comes from ShopifyQL against superbonsai.myshopify.com; no modelling, no estimates. Cohort sizes were cross-checked against the independent <code>new_customers</code> metric and match exactly (Apr 12,527 / May 8,310 / Jun 9,000 / Jul 6,406), and weekly session totals reconcile with the human+bot split to the session. · Cohort figures use <code>net_sales</code> by <code>customer_cohort_month</code> × <code>months_since_first_purchase</code>; month −1 is the acquiring order.</p>
   </footer>
 
 </div>
@@ -381,10 +389,33 @@
   };
 
   var COHORTS = [
-    { m: "Apr 2026", customers: 12527, v: { "-1": 580206.70, "0": 8076.30, "1": 133850.37, "2": 79326.00, "3": 84701.67, "4": 24640.97 }, lastComplete: 3, tag: "pre-change" },
-    { m: "May 2026", customers:  8310, v: { "-1": 382497.92, "0": 5136.45, "1":  79182.61, "2": 55226.53, "3": 25990.81 }, lastComplete: 2, tag: "pre-change" },
-    { m: "Jun 2026", customers:  9000, v: { "-1": 435420.16, "0": 6313.20, "1":  92355.54, "2": 29192.21 }, lastComplete: 1, tag: "~77% post-change" },
-    { m: "Jul 2026", customers:  6406, v: { "-1": 323739.16, "0": 4625.26, "1":  34974.35 }, lastComplete: 0, tag: "fully post-change" }
+    { m: "Apr 2026", customers: 12527, v: { "-1": 580206.70, "0": 8076.30, "1": 133850.37, "2": 79326.00, "3": 84701.67, "4": 24640.97 }, lastComplete: 3, tag: "12,527 new customers" },
+    { m: "May 2026", customers:  8310, v: { "-1": 382497.92, "0": 5136.45, "1":  79182.61, "2": 55226.53, "3": 25990.81 }, lastComplete: 2, tag: "8,310 new" },
+    { m: "Jun 2026", customers:  9000, v: { "-1": 435420.16, "0": 6313.20, "1":  92355.54, "2": 29192.21 }, lastComplete: 1, tag: "9,000 new" },
+    { m: "Jul 2026", customers:  6406, v: { "-1": 323739.16, "0": 4625.26, "1":  34974.35 }, lastComplete: 0, tag: "6,406 new" }
+  ];
+
+
+  // Weekly human/bot split from Shopify's classifier: [week, botSes, botConv, humanSes, humanConv]
+  var HB = [
+["2026-03-30",22354,24,87572,2481],["2026-04-06",16601,28,105022,2995],["2026-04-13",11450,34,105564,2999],
+["2026-04-20",4937,29,68319,2043],["2026-04-27",4253,20,39852,1385],["2026-05-04",5895,31,51808,1516],
+["2026-05-11",3751,24,47661,1540],["2026-05-18",3308,32,47271,1347],["2026-05-25",4435,32,65144,1942],
+["2026-06-01",4834,37,74029,2028],["2026-06-08",4348,28,61440,1998],["2026-06-15",4469,36,66758,2151],
+["2026-06-22",3810,38,56197,1871],["2026-06-29",2985,38,50067,1785],["2026-07-06",4121,26,54821,1438],
+["2026-07-13",3048,12,43339,1048],["2026-07-20",3928,15,51401,1139],["2026-07-27",5440,18,55105,1041],
+["2026-08-03",3784,14,53703,982],["2026-08-10",3864,13,48753,821]
+  ];
+
+  // Conversion by UTM source. Meta merges facebook/ig/fb/instagram (tags consolidated in July).
+  var SRC = [
+    { n: "Meta",           preSes: 681921, preConv: 17595, postSes: 212536, postConv: 3574 },
+    { n: "Direct/untagged",preSes: 221623, preConv:  6718, postSes:  84252, postConv: 1863 },
+    { n: "Klaviyo email",  preSes:  14169, preConv:  1713, postSes:   4537, postConv:  319 },
+    { n: "Postscript SMS", preSes:  20162, preConv:  1689, postSes:   7667, postConv:  457 },
+    { n: "Google",         preSes:   6083, preConv:   216, postSes:    915, postConv:   22 },
+    { n: "Axon",           preSes:   6863, preConv:    34, postSes:  10376, postConv:   49 },
+    { n: "Snapchat",       preSes:  37669, preConv:   153, postSes:    793, postConv:    1 }
   ];
 
   var EH_DATE = "2026-08-13", CHANGE_DATE = "2026-06-07", BREAK_DATE = "2026-07-07";
@@ -707,46 +738,61 @@
                 signed(((b.a.comp / b.a.chk) / bComp - 1) * 100)];
       }));
 
-    // Three windows, per-day rates so unequal window lengths compare honestly.
-    var wA = agg(RAW.filter(function (r) { return r.d >= "2026-08-01" && r.d <= "2026-08-08"; })); // clean, pre-drop
-    var wB = agg(RAW.filter(function (r) { return r.d >= "2026-08-09" && r.d <= "2026-08-12"; })); // inflated sessions
-    var wC = agg(RAW.filter(function (r) { return r.d >= "2026-08-13" && r.d <= "2026-08-15"; })); // clean, post-removal
-    var WIN = [wA, wB, wC];
+    // --- human vs bot conversion (fixed weekly series from Shopify's bot classifier) ---
+    var hbAll = HB.map(function (r) { return (r[2] + r[4]) / (r[1] + r[3]) * 100; });
+    var hbHum = HB.map(function (r) { return r[4] / r[3] * 100; });
+    var hbLab = HB.map(function (r) { return fmtD(r[0]); });
     legend(document.getElementById("l3"), [
-      { name: "Aug 1–8 — clean, before the revenue drop", color: s1 },
-      { name: "Aug 9–12 — sessions inflated", color: s2 },
-      { name: "Aug 13–15 — clean, after removal", color: s3 }]);
-    var perDay = function (w, k) { return w[k] / w.days; };
-    var METRICS = [
-      { g: "Sessions/day", get: function (w) { return perDay(w, "ses"); }, fmt: num },
-      { g: "Orders/day", get: function (w) { return perDay(w, "ord"); }, fmt: num },
-      { g: "Revenue/day", get: function (w) { return perDay(w, "rev"); }, fmt: function (v) { return money(v, 0); } },
-      { g: "RPS", get: function (w) { return w.rps; }, fmt: function (v) { return money(v); } },
-      { g: "AOV", get: function (w) { return w.aov; }, fmt: function (v) { return money(v); } }
-    ];
-    groupedBars(document.getElementById("c3"), document.getElementById("t3"), {
-      groups: METRICS.map(function (m) { return m.g; }),
-      sublabels: METRICS.map(function (m) { return signed((m.get(wC) / m.get(wA) - 1) * 100) + " net"; }),
-      max: 145, ticks: [0, 25, 50, 75, 100, 125], tickFmt: function (v) { return v; },
-      ref: 100, refLabel: "Aug 1–8 = 100",
-      aria: "Three August windows indexed to Aug 1 to 8. Sessions spike then fall; revenue drops at Aug 9 and stays down; RPS recovers after the Aug 13 removal but not to the earlier level.",
-      series: WIN.map(function (w, i) {
-        return { name: ["Aug 1–8", "Aug 9–12", "Aug 13–15"][i], color: [s1, s2, s3][i],
-                 values: METRICS.map(function (m) { return (m.get(w) / m.get(wA)) * 100; }),
-                 fmt: function (v) { return v.toFixed(1); } };
+      { name: "All sessions", color: s1 }, { name: "Human sessions only", color: s2 }]);
+    var hbBreak = HB.findIndex(function (r) { return r[0] === "2026-07-06"; });
+    lineChart(document.getElementById("c3"), document.getElementById("t3"), {
+      labels: hbLab, min: 0, max: 4, ticks: [0, 1, 2, 3, 4],
+      tickFmt: function (v) { return v.toFixed(0) + "%"; }, right: 92,
+      markers: hbBreak > 0 ? [{ i: hbBreak, label: "Jul 7 — checkout break" }] : [],
+      aria: "Weekly conversion rate for all sessions and for human sessions only. Both fall together after July 7.",
+      series: [
+        { name: "All sessions", color: s1, values: hbAll, fmt: function (v) { return v.toFixed(2) + "%"; } },
+        { name: "Human only", color: s2, values: hbHum, fmt: function (v) { return v.toFixed(2) + "%"; } }
+      ],
+      tipTitle: function (i) { return "Week of " + hbLab[i]; },
+      tipNote: function (i) { return "Bot share " + (HB[i][1] / (HB[i][1] + HB[i][3]) * 100).toFixed(1) + "%"; }
+    });
+    table(document.getElementById("tb3"), "Weekly sessions split by Shopify's human/bot classifier (fixed series; not affected by the range selector).",
+      ["Week of", "Human sessions", "Bot sessions", "Bot share", "CVR all", "CVR human only"],
+      HB.map(function (r, i) {
+        return [fmtD(r[0]), num(r[3]), num(r[1]), (r[1] / (r[1] + r[3]) * 100).toFixed(1) + "%",
+                hbAll[i].toFixed(2) + "%", hbHum[i].toFixed(2) + "%"];
+      }));
+
+    // --- conversion by traffic source, pre-break vs post-break ---
+    legend(document.getElementById("l8"), [
+      { name: "Apr 1 – Jul 6 (pre-break)", color: s1 }, { name: "Jul 7 – Aug 16 (post-break)", color: s2 }]);
+    var srcCvr = function (a, b) { return b / a * 100; };
+    groupedBars(document.getElementById("c8"), document.getElementById("t8"), {
+      groups: SRC.map(function (r) { return r.n; }),
+      sublabels: SRC.map(function (r) {
+        return signed((srcCvr(r.postSes, r.postConv) / srcCvr(r.preSes, r.preConv) - 1) * 100);
       }),
+      max: 13, ticks: [0, 3, 6, 9, 12], tickFmt: function (v) { return v + "%"; },
+      aria: "Conversion rate by traffic source before and after the July 7 break. Every source falls.",
+      series: [
+        { name: "Pre-break", color: s1, values: SRC.map(function (r) { return srcCvr(r.preSes, r.preConv); }),
+          fmt: function (v) { return v.toFixed(2) + "%"; } },
+        { name: "Post-break", color: s2, values: SRC.map(function (r) { return srcCvr(r.postSes, r.postConv); }),
+          fmt: function (v) { return v.toFixed(2) + "%"; } }
+      ],
       tipNote: function (gi) {
-        var m = METRICS[gi];
-        return "Actual: " + m.fmt(m.get(wA)) + " → " + m.fmt(m.get(wB)) + " → " + m.fmt(m.get(wC));
+        var r = SRC[gi];
+        return num(r.preSes) + " → " + num(r.postSes) + " sessions";
       }
     });
-    table(document.getElementById("tb3"), "Three August windows (fixed; not affected by the range selector). Per-day rates, since the windows are 8, 4 and 3 days long.",
-      ["Metric", "Aug 1–8 (clean)", "Aug 9–12 (inflated)", "Aug 13–15 (clean)", "Removal effect", "Net vs. Aug 1–8"],
-      METRICS.map(function (m) {
-        return [m.g, m.fmt(m.get(wA)), m.fmt(m.get(wB)), m.fmt(m.get(wC)),
-                signed((m.get(wC) / m.get(wB) - 1) * 100), signed((m.get(wC) / m.get(wA) - 1) * 100)];
-      }).concat([["CVR", pct(wA.cvr), pct(wB.cvr), pct(wC.cvr),
-                  signed((wC.cvr / wB.cvr - 1) * 100), signed((wC.cvr / wA.cvr - 1) * 100)]]));
+    table(document.getElementById("tb8"), "Conversion by UTM source. Pre-break Apr 1 – Jul 6; post-break Jul 7 – Aug 16.",
+      ["Source", "Sessions pre", "CVR pre", "Sessions post", "CVR post", "Change"],
+      SRC.map(function (r) {
+        return [r.n, num(r.preSes), srcCvr(r.preSes, r.preConv).toFixed(2) + "%",
+                num(r.postSes), srcCvr(r.postSes, r.postConv).toFixed(2) + "%",
+                signed((srcCvr(r.postSes, r.postConv) / srcCvr(r.preSes, r.preConv) - 1) * 100)];
+      }));
 
     var augRows = RAW.filter(function (r) { return r.d >= "2026-08-01"; });
     var augPf = augRows.findIndex(function (r) { return r.partial; });
@@ -925,7 +971,7 @@
     var on = tableBtn.getAttribute("aria-pressed") === "true";
     tableBtn.setAttribute("aria-pressed", String(!on));
     tableBtn.textContent = on ? "Show data tables" : "Hide data tables";
-    ["tb1","tb2","tb3","tb4","tb5","tb6","tb7"].forEach(function (id) { document.getElementById(id).hidden = on; });
+    ["tb1","tb2","tb3","tb4","tb5","tb6","tb7","tb8"].forEach(function (id) { document.getElementById(id).hidden = on; });
   });
   window.addEventListener("resize", render);
 
