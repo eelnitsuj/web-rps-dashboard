@@ -198,9 +198,9 @@
   </div>
 
   <div class="card">
-    <h2>Why RPS did not recover after the Escape Hatch came off</h2>
+    <h2>Two separate events, not one</h2>
     <div class="warnbox">
-      <p><strong>This is the answer to "the bots were cleared, so why is RPS still at a low?"</strong> Removing sessions should mechanically <em>raise</em> revenue per session, because the denominator shrinks and the numerator shouldn't care. That is not what happened. Day-of-week-matched, Thu–Sat before (Aug 6–8) against Thu–Sat after (Aug 13–15): sessions fell 18.5%, but web revenue fell 32.4%. Revenue fell roughly twice as fast as traffic, so RPS went <em>down</em> 17%, not up. Sessions that convert at all are not phantom sessions.</p>
+      <p><strong>This is the answer to "the bots were cleared, so why is RPS still at a low?"</strong> There were two independent things happening, and comparing across both of them at once produces a wrong answer. Split into three windows, the Escape Hatch removal did exactly what it was supposed to: against the window immediately before it, sessions fell 35% while revenue rose 3%, so RPS jumped from $0.71 to $1.13. Those sessions were genuinely phantom. What the removal did <em>not</em> fix is a separate revenue decline that began around Aug 9 — revenue per day fell from ~$9,465 to ~$7,000 and stayed there — which is why RPS is still far below the June baseline.</p>
     </div>
     <div class="legend" id="l3"></div>
     <div class="chartbox"><div id="c3"></div><div class="tip" id="t3"></div></div>
@@ -208,7 +208,7 @@
   </div>
 
   <div class="card">
-    <h2>Daily RPS around the two events — the weekly view was hiding this</h2>
+    <h2>Daily RPS — where the level shift actually lands</h2>
     <p class="note">The all-time-low weekly bar for the week of Aug 10 is an aggregation artifact: it blends the contaminated Aug 9–12 stretch with the clean Aug 13–15 days. At daily grain the actual low is Aug 9 ($0.46, the Google bot spike), and the post-removal days have recovered to roughly $1.13 — still well below the $1.30 that Aug 1–8 was running.</p>
     <div class="chartbox"><div id="c4"></div><div class="tip" id="t4"></div></div>
     <div class="tblwrap" hidden id="tb4"></div>
@@ -233,11 +233,17 @@
   <div class="card">
     <h2>Verdicts</h2>
     <div class="findings">
+      <div class="finding confirmed">
+        <div class="vt">Confirmed</div>
+        <div class="cl">The Escape Hatch removal worked. It is not why RPS is low.</div>
+        <p>Measured against the window immediately before it (Aug 9–12, when sessions were inflated), the removal cut sessions 35% per day while revenue per day rose 3% and orders rose 4%. RPS went $0.71 → $1.13, a 59% recovery, and AOV moved −0.6%. That is precisely the signature of removing non-converting traffic: the denominator falls, the numerator doesn't.</p>
+        <p>An intermediate version of this report claimed the opposite — that the removal cost revenue — on a Thu–Sat comparison of Aug 6–8 against Aug 13–15. That was wrong. Aug 6 and 7 were the two strongest revenue days in August, and a separate decline had already begun on Aug 9, so the comparison anchored to a peak and attributed a pre-existing drop to the Aug 13 event. Day-of-week matching does not protect against a level shift landing mid-window.</p>
+      </div>
       <div class="finding revised">
-        <div class="vt">Revised — supersedes the earlier "phantom sessions confirmed" read</div>
-        <div class="cl">The Escape Hatch traffic was converting. Removing it cost real revenue.</div>
-        <p>The earlier version of this report confirmed ~19% phantom-session inflation on session counts alone and predicted that stripping them would lift conversion from 2.09% to 2.57%. With revenue joined in, that prediction fails. Thu–Sat matched: sessions −18.5%, orders −25.7%, revenue −32.4%. Conversion fell to 1.93% and AOV fell from $64.49 to $58.60.</p>
-        <p>Both halves of RPS got worse at once. If those sessions had been bots, removing them would have left orders and revenue untouched and lifted every ratio. Instead the removal took revenue out faster than it took traffic out. Caveat worth holding: this is three days against three days, and Aug 6 was August's single best revenue day, so the baseline is flattering. The direction is clear; the magnitude is not yet settled.</p>
+        <div class="vt">Open — the actual problem</div>
+        <div class="cl">Web revenue stepped down around Aug 9 and has not recovered.</div>
+        <p>Revenue per day fell from $9,465 (Aug 1–8) to roughly $7,000 and has stayed there through Aug 15 — orders per day −16% and AOV −9% against Aug 1–8. This is independent of the Aug 13 removal and is what actually holds RPS 41% below the June baseline.</p>
+        <p>The AOV half of it is not a step at all but the tail of a four-week fade: weekly web AOV peaked at $65.56 (week of Jul 20) and has declined every week since — $64.52, $63.07, $59.13 — back through the $59.20 June baseline. Whatever lifted order value after Jun 7 has fully worn off, so there is no longer anything cushioning the conversion decline. What changed on or around Aug 9 is not identified in this dataset.</p>
       </div>
       <div class="finding refuted">
         <div class="vt">Refuted</div>
@@ -486,7 +492,8 @@
     });
     if (o.ref != null) {
       svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: y(o.ref), y2: y(o.ref), stroke: css("--axis"), "stroke-width": 1 }));
-      svg.appendChild(el("text", { x: M.l + 6, y: y(o.ref) - 7, class: "anno" }, o.refLabel));
+      // right-anchored: the left edge is occupied by the first bar group
+      svg.appendChild(el("text", { x: M.l + pw, y: y(o.ref) - 7, "text-anchor": "end", class: "anno" }, o.refLabel));
     }
     svg.appendChild(el("line", { x1: M.l, x2: M.l + pw, y1: M.t + ph, y2: M.t + ph, class: "axis-line" }));
     o.groups.forEach(function (gl, gi) {
@@ -613,39 +620,46 @@
       ["Period", "CVR", "CVR idx", "AOV", "AOV idx", "RPS idx"],
       B.map(function (b, i) { return [b.label + (b.partial ? " (partial)" : ""), pct(b.a.cvr), iC[i].toFixed(1), money(b.a.aov), iA[i].toFixed(1), iR[i].toFixed(1)]; }));
 
-    var before = agg(RAW.filter(function (r) { return r.d >= "2026-08-06" && r.d <= "2026-08-08"; }));
-    var after = agg(RAW.filter(function (r) { return r.d >= "2026-08-13" && r.d <= "2026-08-15"; }));
-    legend(document.getElementById("l3"), [{ name: "Thu–Sat before (Aug 6–8)", color: s1 }, { name: "Thu–Sat after (Aug 13–15)", color: s2 }]);
-    var rel = function (b, a) { return (a / b) * 100; };
+    // Three windows, per-day rates so unequal window lengths compare honestly.
+    var wA = agg(RAW.filter(function (r) { return r.d >= "2026-08-01" && r.d <= "2026-08-08"; })); // clean, pre-drop
+    var wB = agg(RAW.filter(function (r) { return r.d >= "2026-08-09" && r.d <= "2026-08-12"; })); // inflated sessions
+    var wC = agg(RAW.filter(function (r) { return r.d >= "2026-08-13" && r.d <= "2026-08-15"; })); // clean, post-removal
+    var WIN = [wA, wB, wC];
+    legend(document.getElementById("l3"), [
+      { name: "Aug 1–8 — clean, before the revenue drop", color: s1 },
+      { name: "Aug 9–12 — sessions inflated", color: s2 },
+      { name: "Aug 13–15 — clean, after removal", color: s3 }]);
+    var perDay = function (w, k) { return w[k] / w.days; };
+    var METRICS = [
+      { g: "Sessions/day", get: function (w) { return perDay(w, "ses"); }, fmt: num },
+      { g: "Orders/day", get: function (w) { return perDay(w, "ord"); }, fmt: num },
+      { g: "Revenue/day", get: function (w) { return perDay(w, "rev"); }, fmt: function (v) { return money(v, 0); } },
+      { g: "RPS", get: function (w) { return w.rps; }, fmt: function (v) { return money(v); } },
+      { g: "AOV", get: function (w) { return w.aov; }, fmt: function (v) { return money(v); } }
+    ];
     groupedBars(document.getElementById("c3"), document.getElementById("t3"), {
-      groups: ["Sessions", "Orders", "Revenue", "RPS", "AOV"],
-      sublabels: [signed(rel(before.ses, after.ses) - 100), signed(rel(before.ord, after.ord) - 100),
-                  signed(rel(before.rev, after.rev) - 100), signed(rel(before.rps, after.rps) - 100),
-                  signed(rel(before.aov, after.aov) - 100)],
-      max: 110, ticks: [0, 25, 50, 75, 100], tickFmt: function (v) { return v; },
-      ref: 100, refLabel: "Before = 100",
-      aria: "Indexed comparison of the three days before and after the Escape Hatch removal. Revenue falls further than sessions.",
-      series: [
-        { name: "Before (Aug 6–8)", color: s1, values: [100, 100, 100, 100, 100], fmt: function (v) { return v.toFixed(0); } },
-        { name: "After (Aug 13–15)", color: s2, values: [rel(before.ses, after.ses), rel(before.ord, after.ord),
-            rel(before.rev, after.rev), rel(before.rps, after.rps), rel(before.aov, after.aov)],
-          fmt: function (v) { return v.toFixed(1); } }
-      ],
+      groups: METRICS.map(function (m) { return m.g; }),
+      sublabels: METRICS.map(function (m) { return signed((m.get(wC) / m.get(wA) - 1) * 100) + " net"; }),
+      max: 145, ticks: [0, 25, 50, 75, 100, 125], tickFmt: function (v) { return v; },
+      ref: 100, refLabel: "Aug 1–8 = 100",
+      aria: "Three August windows indexed to Aug 1 to 8. Sessions spike then fall; revenue drops at Aug 9 and stays down; RPS recovers after the Aug 13 removal but not to the earlier level.",
+      series: WIN.map(function (w, i) {
+        return { name: ["Aug 1–8", "Aug 9–12", "Aug 13–15"][i], color: [s1, s2, s3][i],
+                 values: METRICS.map(function (m) { return (m.get(w) / m.get(wA)) * 100; }),
+                 fmt: function (v) { return v.toFixed(1); } };
+      }),
       tipNote: function (gi) {
-        var raw = [[num(before.ses), num(after.ses)], [num(before.ord), num(after.ord)],
-                   [money(before.rev, 0), money(after.rev, 0)], [money(before.rps), money(after.rps)],
-                   [money(before.aov), money(after.aov)]];
-        return "Actual: " + raw[gi][0] + " → " + raw[gi][1];
+        var m = METRICS[gi];
+        return "Actual: " + m.fmt(m.get(wA)) + " → " + m.fmt(m.get(wB)) + " → " + m.fmt(m.get(wC));
       }
     });
-    table(document.getElementById("tb3"), "Escape Hatch removal — day-of-week-matched Thu–Sat windows (fixed; not affected by the range selector).",
-      ["Metric", "Before (Aug 6–8)", "After (Aug 13–15)", "Change"],
-      [["Sessions", num(before.ses), num(after.ses), signed((after.ses / before.ses - 1) * 100)],
-       ["Web orders", num(before.ord), num(after.ord), signed((after.ord / before.ord - 1) * 100)],
-       ["Web revenue", money(before.rev, 0), money(after.rev, 0), signed((after.rev / before.rev - 1) * 100)],
-       ["RPS", money(before.rps), money(after.rps), signed((after.rps / before.rps - 1) * 100)],
-       ["CVR", pct(before.cvr), pct(after.cvr), signed((after.cvr / before.cvr - 1) * 100)],
-       ["AOV", money(before.aov), money(after.aov), signed((after.aov / before.aov - 1) * 100)]]);
+    table(document.getElementById("tb3"), "Three August windows (fixed; not affected by the range selector). Per-day rates, since the windows are 8, 4 and 3 days long.",
+      ["Metric", "Aug 1–8 (clean)", "Aug 9–12 (inflated)", "Aug 13–15 (clean)", "Removal effect", "Net vs. Aug 1–8"],
+      METRICS.map(function (m) {
+        return [m.g, m.fmt(m.get(wA)), m.fmt(m.get(wB)), m.fmt(m.get(wC)),
+                signed((m.get(wC) / m.get(wB) - 1) * 100), signed((m.get(wC) / m.get(wA) - 1) * 100)];
+      }).concat([["CVR", pct(wA.cvr), pct(wB.cvr), pct(wC.cvr),
+                  signed((wC.cvr / wB.cvr - 1) * 100), signed((wC.cvr / wA.cvr - 1) * 100)]]));
 
     var augRows = RAW.filter(function (r) { return r.d >= "2026-08-01"; });
     var augPf = augRows.findIndex(function (r) { return r.partial; });
