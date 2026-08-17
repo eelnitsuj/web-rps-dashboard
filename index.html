@@ -138,23 +138,25 @@
 
   <header>
     <h1>Web revenue per session — Super Bonsai</h1>
-    <p class="sub">Online Store channel only · <code>superbonsai.myshopify.com</code> · Source: Shopify ShopifyQL (<code>sales</code>, <code>sessions</code>), pulled 2026-08-16. Data begins 2026-06-07; nothing earlier is available from this source.</p>
+    <p class="sub">Online Store channel only · <code>superbonsai.myshopify.com</code> · Source: Shopify ShopifyQL (<code>sales</code>, <code>sessions</code>), pulled 2026-08-16. Data runs from 2026-04-01. The reference baseline is Apr 1 – Jul 6, the stable window before the Jul 7 checkout break.</p>
   </header>
 
   <div class="filters">
     <div class="frow">
       <span class="flabel">Range</span>
       <button class="ctl" data-preset="all">Full range</button>
-      <button class="ctl" data-preset="base">June baseline</button>
+      <button class="ctl" data-preset="base">Pre-break baseline</button>
+      <button class="ctl" data-preset="apr">April</button>
+      <button class="ctl" data-preset="may">May</button>
       <button class="ctl" data-preset="d30">Last 30 days</button>
       <button class="ctl" data-preset="d14">Last 14 days</button>
       <button class="ctl" data-preset="post">Since Escape Hatch removed</button>
     </div>
     <div class="frow">
       <span class="flabel">Custom</span>
-      <input class="dt" type="date" id="from" min="2026-06-07" max="2026-08-16">
+      <input class="dt" type="date" id="from" min="2026-04-01" max="2026-08-16">
       <span style="font-size:12.5px;color:var(--muted)">to</span>
-      <input class="dt" type="date" id="to" min="2026-06-07" max="2026-08-16">
+      <input class="dt" type="date" id="to" min="2026-04-01" max="2026-08-16">
       <button class="ctl" id="applyBtn">Apply</button>
       <span class="rangeout" id="rangeOut"></span>
     </div>
@@ -175,7 +177,7 @@
       </div>
       <div>
         <div class="delta" id="heroDelta">—</div>
-        <div class="vs">vs. $1.90 June baseline (Jun 8 – Jul 5, fixed reference)</div>
+        <div class="vs">vs. $1.68 pre-break baseline (Apr 1 – Jul 6, fixed reference)</div>
       </div>
     </div>
   </div>
@@ -184,23 +186,33 @@
 
   <div class="card">
     <h2>Revenue per session over time</h2>
-    <p class="note">The lead metric — web revenue ÷ sessions. Markers show the Jun 7 site change and the Aug 13 Escape Hatch removal. <span class="rangetag" id="rt1"></span></p>
+    <p class="note">The lead metric — web revenue ÷ sessions. Markers show the Jun 7 site change, the Jul 7 checkout break, and the Aug 13 Escape Hatch removal. <span class="rangetag" id="rt1"></span></p>
     <div class="chartbox"><div id="c1"></div><div class="tip" id="t1"></div></div>
     <div class="tblwrap" hidden id="tb1"></div>
   </div>
 
   <div class="card">
     <h2>Decomposition — conversion vs. order value</h2>
-    <p class="note">Indexed to the June baseline = 100, single axis. RPS index = CVR index × AOV index ÷ 100 exactly, so this is the complete decomposition with no residual. <span class="rangetag" id="rt2"></span></p>
+    <p class="note">Indexed to the pre-break baseline (Apr 1 – Jul 6) = 100, single axis. RPS index = CVR index × AOV index ÷ 100 exactly, so this is the complete decomposition with no residual. <span class="rangetag" id="rt2"></span></p>
     <div class="legend" id="l2"></div>
     <div class="chartbox"><div id="c2"></div><div class="tip" id="t2"></div></div>
     <div class="tblwrap" hidden id="tb2"></div>
   </div>
 
   <div class="card">
+    <h2>Where in the funnel it broke — checkout completion, on July 7</h2>
+    <div class="warnbox">
+      <p><strong>Checkout completion held at ~52% for three straight months, then fell off a cliff on Jul 7.</strong> Apr 52.3%, May 52.5%, Jun 8 – Jul 5 52.0% — then Jul 7 37.4%, Jul 8 33.9%, Jul 9 32.8%. Cart-add and reach-checkout rates went <em>up</em> in those same days, so shoppers were not losing interest — they were getting to checkout and failing to finish. That is a checkout, payment, or shipping-step failure, not a traffic-quality or demand problem. It has since partly healed to ~45%, still about 7 points under baseline.</p>
+    </div>
+    <div class="legend" id="l7"></div>
+    <div class="chartbox"><div id="c7"></div><div class="tip" id="t7"></div></div>
+    <div class="tblwrap" hidden id="tb7"></div>
+  </div>
+
+  <div class="card">
     <h2>Two separate events, not one</h2>
     <div class="warnbox">
-      <p><strong>This is the answer to "the bots were cleared, so why is RPS still at a low?"</strong> There were two independent things happening, and comparing across both of them at once produces a wrong answer. Split into three windows, the Escape Hatch removal did exactly what it was supposed to: against the window immediately before it, sessions fell 35% while revenue rose 3%, so RPS jumped from $0.71 to $1.13. Those sessions were genuinely phantom. What the removal did <em>not</em> fix is a separate revenue decline that began around Aug 9 — revenue per day fell from ~$9,465 to ~$7,000 and stayed there — which is why RPS is still far below the June baseline.</p>
+      <p><strong>This is the answer to "the bots were cleared, so why is RPS still at a low?"</strong> There were two independent things happening, and comparing across both of them at once produces a wrong answer. Split into three windows, the Escape Hatch removal did exactly what it was supposed to: against the window immediately before it, sessions fell 35% while revenue rose 3%, so RPS jumped from $0.71 to $1.13. Those sessions were genuinely phantom. What the removal did <em>not</em> fix is a separate revenue decline that began around Aug 9 — revenue per day fell from ~$9,465 to ~$7,000 and stayed there — which is why RPS is still far below the pre-break baseline.</p>
     </div>
     <div class="legend" id="l3"></div>
     <div class="chartbox"><div id="c3"></div><div class="tip" id="t3"></div></div>
@@ -245,15 +257,17 @@
         <p>Revenue per day fell from $9,465 (Aug 1–8) to roughly $7,000 and has stayed there through Aug 15 — orders per day −16% and AOV −9% against Aug 1–8. This is independent of the Aug 13 removal and is what actually holds RPS 41% below the June baseline.</p>
         <p>The AOV half of it is not a step at all but the tail of a four-week fade: weekly web AOV peaked at $65.56 (week of Jul 20) and has declined every week since — $64.52, $63.07, $59.13 — back through the $59.20 June baseline. Whatever lifted order value after Jun 7 has fully worn off, so there is no longer anything cushioning the conversion decline. What changed on or around Aug 9 is not identified in this dataset.</p>
       </div>
-      <div class="finding refuted">
-        <div class="vt">Refuted</div>
-        <div class="cl">The pre-July baseline was 3.16%, not the 2.5–3% remembered.</div>
-        <p>Measured sitewide conversion for Jun 8 – Jul 5 is <strong>3.16%</strong>; the spot weeks check out at <strong>3.18%</strong> (Jun 22) and <strong>3.44%</strong> (Jun 29). No day in the June baseline fell below 2.65%. The decline is larger than the remembered baseline implies, not smaller.</p>
+      <div class="finding confirmed">
+        <div class="vt">Corrected — the owner was right</div>
+        <div class="cl">The pre-break baseline is 2.84%, squarely inside the remembered 2.5–3%.</div>
+        <p>An earlier version of this report called that memory refuted, on the basis that Jun 8 – Jul 5 measured 3.16%. That window was a local peak, not the norm. Across the full stable period Apr 1 – Jul 6, sitewide conversion is <strong>2.84%</strong> — April 2.63%, May 2.86%, Jun 1–6 2.65%. The remembered range was accurate and the 3.16% figure was an artifact of the window I was originally handed.</p>
+        <p>This matters for sizing: against 2.84% rather than 3.16%, the conversion decline is \u221232%, not \u221245%. Still severe, but a third smaller than previously stated.</p>
       </div>
       <div class="finding refuted">
-        <div class="vt">Refuted</div>
-        <div class="cl">AOV is up ~6.5%, not the +26% implied by −40% ÷ −52%.</div>
-        <p>Aligned to one window and one channel (Online Store, week of Aug 3 vs. June baseline): RPS −41.6%, CVR −45.1%, AOV <strong>+6.5%</strong>, reconciling exactly at 0.549 × 1.065 = 0.585. The +26% came from dividing an RPS and a CVR measured over different windows. On Shopify's own <code>average_order_value</code> metric the lift reads +13.8%, since that metric excludes post-order adjustments.</p>
+        <div class="vt">Refuted — twice over</div>
+        <div class="cl">AOV is flat. It never explained anything.</div>
+        <p>Against the pre-break baseline of <strong>$59.15</strong> (Apr 1 – Jul 6), current AOV is <strong>$58.60</strong> — <strong>−0.9%</strong>. Order value has sat between $58 and $60 for four and a half months. The +26% implied by dividing −40% RPS by −52% CVR was never real; nor was the +6.5% I reported off the narrower June window; nor was the mid-July bump to $65.56, which was a four-week excursion that fully reverted.</p>
+        <p>With AOV flat, the decomposition is trivial: RPS −32.8% is almost entirely CVR −32.1%. There is no order-value story here at all.</p>
       </div>
       <div class="finding confirmed">
         <div class="vt">Open — not yet answerable</div>
@@ -279,6 +293,40 @@
   // ============ DATA ============
   // d, sessions, cartAdds, reachedCheckout, completedCheckout, webRev, webOrders
   var RAW = [
+["2026-04-01",15766,813,716,363,23313.09,369],["2026-04-02",16697,739,661,376,22931.08,386],
+["2026-04-03",14582,756,697,391,23917.92,403],["2026-04-04",15513,743,686,337,21308.15,363],
+["2026-04-05",15456,667,598,309,18645.59,317],["2026-04-06",17733,816,762,379,22502.33,382],
+["2026-04-07",15958,828,715,362,22854.34,366],["2026-04-08",21145,1023,862,466,26668.01,470],
+["2026-04-09",17442,976,868,475,27403.73,476],["2026-04-10",13323,899,789,427,26261.69,428],
+["2026-04-11",15190,927,808,417,23902.91,421],["2026-04-12",20832,990,899,497,29275.04,501],
+["2026-04-13",19727,1133,971,523,30565.04,529],["2026-04-14",17064,959,812,407,24436.68,411],
+["2026-04-15",17407,951,837,427,24349.67,430],["2026-04-16",16619,928,802,438,26726.84,444],
+["2026-04-17",17038,983,859,456,26605.92,474],["2026-04-18",14965,878,787,385,22398.53,392],
+["2026-04-19",14194,893,784,397,21833.86,401],["2026-04-20",15176,1045,941,451,27479.49,454],
+["2026-04-21",10934,634,577,272,15783.52,284],["2026-04-22",10447,631,573,311,18382.38,317],
+["2026-04-23",10452,594,527,258,14349.78,262],["2026-04-24",10541,637,568,317,18493.35,320],
+["2026-04-25",7322,465,431,232,13080.29,234],["2026-04-26",8384,506,431,231,14127.30,231],
+["2026-04-27",5367,353,334,184,12284.41,188],["2026-04-28",5209,343,321,176,11193.02,180],
+["2026-04-29",5346,364,342,173,9780.97,173],["2026-04-30",5914,405,384,202,12097.90,204],
+["2026-05-01",8020,573,492,268,14919.22,272],["2026-05-02",7180,451,377,214,12222.93,215],
+["2026-05-03",7069,418,366,188,11231.71,193],["2026-05-04",6519,382,340,185,11521.05,189],
+["2026-05-05",7915,418,392,216,12943.58,219],["2026-05-06",7874,417,364,199,12105.55,199],
+["2026-05-07",8584,463,416,223,12994.75,224],["2026-05-08",8330,494,444,252,14350.90,255],
+["2026-05-09",9936,513,461,236,14560.44,238],["2026-05-10",8545,486,438,236,13867.93,236],
+["2026-05-11",9500,580,485,269,15415.91,270],["2026-05-12",9000,534,474,252,15119.45,256],
+["2026-05-13",7076,451,401,211,12783.30,213],["2026-05-14",7215,539,460,250,15183.26,254],
+["2026-05-15",6656,470,427,202,11530.94,203],["2026-05-16",5536,381,329,174,10845.55,176],
+["2026-05-17",6429,479,422,206,11618.89,207],["2026-05-18",6610,453,398,197,11998.17,200],
+["2026-05-19",7231,410,366,170,9944.58,171],["2026-05-20",7956,494,395,216,13125.93,217],
+["2026-05-21",6919,524,427,215,13950.56,214],["2026-05-22",6638,381,330,172,11529.72,174],
+["2026-05-23",6496,394,342,161,10417.38,166],["2026-05-24",8729,574,472,248,16308.29,250],
+["2026-05-25",9198,619,529,269,17387.09,273],["2026-05-26",8606,490,416,211,13592.07,215],
+["2026-05-27",10095,604,501,243,15495.07,244],["2026-05-28",9435,626,523,284,16773.09,286],
+["2026-05-29",10783,724,648,349,20422.39,350],["2026-05-30",10707,663,571,302,17448.65,305],
+["2026-05-31",10755,672,579,316,19546.14,318],["2026-06-01",12171,729,621,320,18562.17,320],
+["2026-06-02",12409,727,613,327,19871.25,332],["2026-06-03",14848,679,583,299,18546.74,307],
+["2026-06-04",13292,789,675,367,22449.24,368],["2026-06-05",9968,605,526,289,17860.10,292],
+["2026-06-06",7305,504,429,209,12664.76,215],
 ["2026-06-07",8870,596,486,254,14862.72,255],["2026-06-08",10451,719,604,341,20220.60,343],
 ["2026-06-09",8903,560,476,236,14142.97,238],["2026-06-10",10046,633,551,304,17779.63,306],
 ["2026-06-11",10222,708,592,312,18038.78,312],["2026-06-12",8465,607,513,260,14466.50,260],
@@ -339,8 +387,8 @@
     { m: "Jul 2026", customers:  6406, v: { "-1": 323739.16, "0": 4625.26, "1":  34974.35 }, lastComplete: 0, tag: "fully post-change" }
   ];
 
-  var EH_DATE = "2026-08-13", CHANGE_DATE = "2026-06-07";
-  var BASE_FROM = "2026-06-08", BASE_TO = "2026-07-05";
+  var EH_DATE = "2026-08-13", CHANGE_DATE = "2026-06-07", BREAK_DATE = "2026-07-07";
+  var BASE_FROM = "2026-04-01", BASE_TO = "2026-07-06";  // stable pre-break window
   var MIN = RAW[0].d, MAX = RAW[RAW.length - 1].d;
 
   function agg(rows) {
@@ -558,8 +606,8 @@
 
     var tiles = [
       { k: "Web revenue", v: money(sel.rev, 0), d: (sel.rev / (BASE.rev / BASE.days * sel.days) - 1) * 100, b: "vs. baseline rate over " + sel.days + " days" },
-      { k: "Web conversion rate", v: pct(sel.cvr), d: (sel.cvr / BASE.cvr - 1) * 100, b: "June baseline " + pct(BASE.cvr) },
-      { k: "Web AOV", v: money(sel.aov), d: (sel.aov / BASE.aov - 1) * 100, b: "June baseline " + money(BASE.aov) },
+      { k: "Web conversion rate", v: pct(sel.cvr), d: (sel.cvr / BASE.cvr - 1) * 100, b: "Pre-break baseline " + pct(BASE.cvr) },
+      { k: "Web AOV", v: money(sel.aov), d: (sel.aov / BASE.aov - 1) * 100, b: "Pre-break baseline " + money(BASE.aov) },
       { k: "Sessions", v: num(sel.ses), d: (sel.ses / sel.days / (BASE.ses / BASE.days) - 1) * 100, b: num(sel.ses / sel.days) + "/day vs. " + num(BASE.ses / BASE.days) + " baseline" },
       { k: "Web orders", v: num(sel.ord), d: (sel.ord / sel.days / (BASE.ord / BASE.days) - 1) * 100, b: num(sel.ord / sel.days) + "/day vs. " + num(BASE.ord / BASE.days) + " baseline" }
     ];
@@ -577,6 +625,8 @@
     if (ehIdx > 0) mk.push({ i: ehIdx, label: "Escape Hatch off", row: 0 });
     var chIdx = B.findIndex(function (b) { return b.rows.some(function (r) { return r.d === CHANGE_DATE; }); });
     if (chIdx > 0) mk.push({ i: chIdx, label: "Jun 7 change", row: 1 });
+    var brIdx = B.findIndex(function (b) { return b.rows.some(function (r) { return r.d === BREAK_DATE; }); });
+    if (brIdx > 0) mk.push({ i: brIdx, label: "Jul 7 — checkout break", row: 2 });
 
     var rps = B.map(function (b) { return b.a.rps; });
     var rpsTop = niceMax(Math.max.apply(null, rps.concat([BASE.rps]))) * 1.08;
@@ -584,7 +634,7 @@
       labels: labels, min: 0, max: rpsTop,
       ticks: [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
       tickFmt: function (v) { return "$" + v.toFixed(2); },
-      ref: BASE.rps, refLabel: "June baseline " + money(BASE.rps), markers: mk, partialFrom: pf,
+      ref: BASE.rps, refLabel: "Pre-break baseline " + money(BASE.rps), markers: mk, partialFrom: pf,
       aria: "Revenue per session over the selected range.",
       series: [{ name: "Revenue per session", color: s1, values: rps, fmt: function (v) { return money(v); } }],
       tipTitle: function (i) { return (state.gran === "week" ? "Week of " : "") + labels[i]; },
@@ -607,7 +657,7 @@
       min: Math.max(0, Math.floor(Math.min.apply(null, allI) / 20) * 20),
       max: Math.ceil(Math.max.apply(null, allI) / 20) * 20, right: 108,
       ticks: [0, 20, 40, 60, 80, 100, 120, 140, 160],
-      tickFmt: function (v) { return v; }, ref: 100, refLabel: "June baseline = 100",
+      tickFmt: function (v) { return v; }, ref: 100, refLabel: "Pre-break baseline = 100",
       markers: mk, partialFrom: pf, aria: "Conversion rate and average order value indexed to the June baseline.",
       series: [
         { name: "Revenue per session", color: s1, values: iR, fmt: function (v) { return v.toFixed(1); } },
@@ -619,6 +669,43 @@
     table(document.getElementById("tb2"), "Indexed decomposition — " + tag + " (June baseline = 100).",
       ["Period", "CVR", "CVR idx", "AOV", "AOV idx", "RPS idx"],
       B.map(function (b, i) { return [b.label + (b.partial ? " (partial)" : ""), pct(b.a.cvr), iC[i].toFixed(1), money(b.a.aov), iA[i].toFixed(1), iR[i].toFixed(1)]; }));
+
+
+    // --- funnel stage rates, indexed to the pre-break baseline ---
+    var bCart = BASE.cart / BASE.ses, bChk = BASE.chk / BASE.ses, bComp = BASE.comp / BASE.chk;
+    var fCart = B.map(function (b) { return (b.a.cart / b.a.ses) / bCart * 100; });
+    var fChk  = B.map(function (b) { return (b.a.chk / b.a.ses) / bChk * 100; });
+    var fComp = B.map(function (b) { return (b.a.comp / b.a.chk) / bComp * 100; });
+    legend(document.getElementById("l7"), [
+      { name: "Cart-add rate", color: s3 },
+      { name: "Reached-checkout rate", color: s4 },
+      { name: "Checkout completion rate", color: s2 }]);
+    var allF = fCart.concat(fChk, fComp);
+    lineChart(document.getElementById("c7"), document.getElementById("t7"), {
+      labels: labels,
+      min: Math.max(0, Math.floor(Math.min.apply(null, allF) / 20) * 20),
+      max: Math.ceil(Math.max.apply(null, allF) / 20) * 20, right: 112,
+      ticks: [0, 20, 40, 60, 80, 100, 120, 140, 160, 180],
+      tickFmt: function (v) { return v; }, ref: 100, refLabel: "Pre-break baseline = 100",
+      markers: mk, partialFrom: pf,
+      aria: "Funnel stage rates indexed to the pre-break baseline. Checkout completion collapses on July 7 while cart-add and reach-checkout rates hold.",
+      series: [
+        { name: "Cart-add rate", color: s3, values: fCart, fmt: function (v) { return v.toFixed(1); } },
+        { name: "Reached-checkout rate", color: s4, values: fChk, fmt: function (v) { return v.toFixed(1); } },
+        { name: "Checkout completion", color: s2, values: fComp, fmt: function (v) { return v.toFixed(1); } }
+      ],
+      tipTitle: function (i) { return (state.gran === "week" ? "Week of " : "") + labels[i]; },
+      tipNote: function (i) {
+        return "Completion " + pct(B[i].a.comp / B[i].a.chk) + " vs. " + pct(bComp) + " baseline";
+      }
+    });
+    table(document.getElementById("tb7"), "Funnel stage rates — " + tag + ". Completion is completed \u00f7 reached-checkout.",
+      ["Period", "Sessions", "Cart-add %", "Reached-chk %", "Completed", "Completion %", "vs. base"],
+      B.map(function (b) {
+        return [b.label + (b.partial ? " (partial)" : ""), num(b.a.ses), pct(b.a.cart / b.a.ses),
+                pct(b.a.chk / b.a.ses), num(b.a.comp), pct(b.a.comp / b.a.chk),
+                signed(((b.a.comp / b.a.chk) / bComp - 1) * 100)];
+      }));
 
     // Three windows, per-day rates so unequal window lengths compare honestly.
     var wA = agg(RAW.filter(function (r) { return r.d >= "2026-08-01" && r.d <= "2026-08-08"; })); // clean, pre-drop
@@ -794,6 +881,8 @@
   var PRESETS = {
     all:  function () { return [MIN, MAX]; },
     base: function () { return [BASE_FROM, BASE_TO]; },
+    apr:  function () { return ["2026-04-01", "2026-04-30"]; },
+    may:  function () { return ["2026-05-01", "2026-05-31"]; },
     d30:  function () { return [shiftDays(MAX, -29), MAX]; },
     d14:  function () { return [shiftDays(MAX, -13), MAX]; },
     post: function () { return [EH_DATE, MAX]; }
@@ -836,7 +925,7 @@
     var on = tableBtn.getAttribute("aria-pressed") === "true";
     tableBtn.setAttribute("aria-pressed", String(!on));
     tableBtn.textContent = on ? "Show data tables" : "Hide data tables";
-    ["tb1","tb2","tb3","tb4","tb5","tb6"].forEach(function (id) { document.getElementById(id).hidden = on; });
+    ["tb1","tb2","tb3","tb4","tb5","tb6","tb7"].forEach(function (id) { document.getElementById(id).hidden = on; });
   });
   window.addEventListener("resize", render);
 
